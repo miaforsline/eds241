@@ -11,11 +11,6 @@ header-includes:
   - \usepackage{float}
 ---
 
-# Setup
-
--   load packages
--   set options
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
                       echo = TRUE, 
@@ -47,19 +42,32 @@ options(scipen=999) # not scientific notation
 
 library(tidyverse)
 library(here)
+library(patchwork)
 library(estimatr)
 library(car)
 ```
 
+# Introduction
+
+This assignment uses data from [CalEnviroScreen 4.0](https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40), a mapping and data tool produced by the California Office of Environmental Health Hazards Assessment (OEHHA). The data are compiled and constructed from a variety of sources and cover all 8,035 census tracts in California.
+
+Specifically, I used the following variables:
+
+-   census tract ID,
+
+-   total population,
+
+-   California county name (the county where the census tract is located),
+
+-   Low Birth Weight (% of census tract births with weight \< 2500g),
+
+-   PM25 (ambient concentrations of PM2.5 in the census tract, in µg/m^3^),
+
+-   and Poverty (% of population in the census tract living below twice the federal poverty line).
+
 ## Read in and clean data
 
--   select variables of interest
-
-    -   census tract
-    -   California county
-    -   low birth: % of census tract births with weight \< 2500g
-    -   PM2.5: ambient concentrations of PM2.5 in the census tract, in µg per m^3^
-    -   poverty: % of population in the census tract living below twice the federal poverty line
+Select variables of interest
 
 ```{r}
     data <- read_csv(here("data", "CES4.csv"))
@@ -71,16 +79,11 @@ library(car)
     data_clean <- data_clean %>% 
       select(census_tract,
              california_county,
+             total_population,
              low_birth_weight,
              pm2_5,
              poverty)
 ```
-
-# Introduction
-
-The data for this assignment come from [CalEnviroScreen 4.0](https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40), a mapping and data tool produced by the California Office of Environmental Health Hazards Assessment (OEHHA). The data are compiled and constructed from a variety of sources and cover all 8,035 census tracts in California.
-
-For the assignment, you will need the following variables: CensusTract, TotalPopulation, CaliforniaCounty (the county where the census tract is located), LowBirthWeight (percent of census tract births with weight less than 2500g), PM25 (ambient concentrations of PM2.5 in the census tract, in micrograms per cubic meters), and Poverty (percent of population in the census tract living below twice the federal poverty line).
 
 # (a) What is the average concentration of PM2.5 across all census tracts in California?
 
@@ -94,7 +97,7 @@ The mean concentration of PM2.5 across all census tracts in California is `r mea
 
 # (b) What county has the highest level of poverty in California?
 
--   drop counties with NA values for poverty
+Drop counties with NA values for poverty
 
 ```{r}
 data_pov <- data_clean %>% 
@@ -111,18 +114,37 @@ max_pov_county
 # (c) Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
 ```{r}
-ggplot(data = data_clean) + 
-  geom_histogram(aes(x = low_birth_weight)) + 
+
+pm_lab <- expression(paste("PM2.5 (µg/m"^"3",")")) 
+
+p1 <- ggplot(data = data_clean) + 
+  geom_histogram(aes(x = low_birth_weight),
+                 binwidth = 0.25) + 
   theme_classic() + 
   labs(y = "Frequency", 
        x = "% of Low Birth Weights")
 
-ggplot(data = data_clean) + 
-  geom_histogram(aes(x = pm2_5)) + 
+p2 <- ggplot(data = data_clean) + 
+  geom_histogram(aes(x = pm2_5),
+                 binwidth = 0.5) + 
   theme_classic() + 
   labs(y = "Frequency", 
-       x = "PM2.5 (µg/m3)")
+       x = pm_lab)
 ```
+
+\newpage
+
+<center>
+
+**Figure 1: Distributions of low birth weights and PM2.5 in California census tracts**
+
+</center>
+
+```{r , fig.width = 4, fig.height = 3, eval=TRUE, echo=FALSE}
+p1 / p2
+```
+
+\noindent Figure 1 shows the distributions of % birth weights \< 2500g and ambient concentrations of PM2.5 (µg/m^3^) per census tract. Data is sourced from CalEnviroScreen 4.0.
 
 # (d) Estimate a OLS regression of LowBirthWeight on PM25. Report the estimated slope coefficient and its heteroskedasticity-robust standard error. Interpret the estimated slope coefficient. Is the effect of PM25 on LowBirthWeight statistically significant at the 5%?
 
