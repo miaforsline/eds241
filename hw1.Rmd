@@ -9,18 +9,33 @@ output:
 header-includes:
   - \setlength{\parindent}{1em}
   - \usepackage{float}
+editor_options: 
+  markdown: 
+    wrap: 72
 ---
-# Setup 
-- load packages
-- set options 
+
+# Setup
+
+-   load packages
+-   set options
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
                       echo = TRUE, 
                       message = FALSE, 
                       warning = FALSE)
 
-packages=c("stargazer", "here", "tidyr", "dplyr","stringr", "janitor", 
-           "cowplot", "ggplot2", "tinytex", "datasets", "tibble")
+packages=c("stargazer", 
+           "here", 
+           "tidyr", 
+           "dplyr",
+           "stringr", 
+           "janitor", 
+           "cowplot", 
+           "ggplot2", 
+           "tinytex", 
+           "datasets", 
+           "tibble")
 
 for (i in packages) {
   if (require(i,character.only=TRUE)==FALSE) {
@@ -32,25 +47,77 @@ for (i in packages) {
 }
 
 options(scipen=999) # not scientific notation
+
+library(tidyverse)
+library(here)
 ```
 
-# Introduction 
+## Read in and clean data
 
-The data for this assignment come from CalEnviroScreen 4.0, a mapping and data tool
-produced by the California Office of Environmental Health Hazards Assessment (OEHHA). The
-data are compiled and constructed from a variety of sources and cover all 8,035 census tracts in California. Source: https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40
+-   select variables of interest
 
-For the assignment, you will need the following variables: CensusTract, TotalPopulation,
-CaliforniaCounty (the county where the census tract is located), LowBirthWeight (percent of
-census tract births with weight less than 2500g), PM25 (ambient concentrations of PM2.5 in the
-census tract, in micrograms per cubic meters), and Poverty (percent of population in the census tract living below twice the federal poverty line).
+    -   census tract
+    -   California county
+    -   low birth: % of census tract births with weight \< 2500g
+    -   PM2.5: ambient concentrations of PM2.5 in the census tract, in
+        µg per m^3^
+    -   poverty: % of population in the census tract living below twice
+        the federal poverty line
+
+```{r}
+    data <- read_csv(here("data", "CES4.csv"))
+
+    data_clean <- data %>% 
+      clean_names()
+
+
+    data_clean <- data_clean %>% 
+      select(census_tract,
+             california_county,
+             low_birth_weight,
+             pm2_5,
+             poverty)
+```
+
+# Introduction
+
+The data for this assignment come from [CalEnviroScreen
+4.0](https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40), a
+mapping and data tool produced by the California Office of Environmental
+Health Hazards Assessment (OEHHA). The data are compiled and constructed
+from a variety of sources and cover all 8,035 census tracts in
+California.
+
+For the assignment, you will need the following variables: CensusTract,
+TotalPopulation, CaliforniaCounty (the county where the census tract is
+located), LowBirthWeight (percent of census tract births with weight
+less than 2500g), PM25 (ambient concentrations of PM2.5 in the census
+tract, in micrograms per cubic meters), and Poverty (percent of
+population in the census tract living below twice the federal poverty
+line).
 
 # What is the average concentration of PM2.5 across all census tracts in California?
-```{r}
 
+```{r}
+mean_pm2.5 <- mean(data_clean$pm2_5) %>% 
+  round(digits = 2)
+mean_pm2.5
 ```
 
+The mean concentration of PM2.5 across all census tracts in California is `r mean_pm2.5` µg/m^3^. 
+
 # What county has the highest level of poverty in California?
+- drop counties with NA values for poverty 
+```{r}
+data_pov <- data_clean %>% 
+  drop_na(poverty)
+
+max_pov_county <- subset(data_pov, poverty == max(data_pov$poverty))
+max_pov_county <- max_pov_county$california_county
+max_pov_county
+
+```
+`r max_pov_county` is the county with the highest level of poverty in California. 
 
 # Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
