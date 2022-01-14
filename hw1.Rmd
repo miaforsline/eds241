@@ -1,0 +1,63 @@
+---
+title: "EDS 241: Assignment 1"
+author: "Mia Forsline"
+date: "1/21/2022"
+output: 
+  pdf_document:
+    toc: false
+    number_sections: yes
+header-includes:
+  - \setlength{\parindent}{1em}
+  - \usepackage{float}
+---
+# Setup 
+- load packages
+- set options 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
+                      echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE)
+
+packages=c("stargazer", "here", "tidyr", "dplyr","stringr", "janitor", 
+           "cowplot", "ggplot2", "tinytex", "datasets", "tibble")
+
+for (i in packages) {
+  if (require(i,character.only=TRUE)==FALSE) {
+    install.packages(i,repos='http://cran.us.r-project.org')
+  }
+  else {
+    require(i,character.only=TRUE)
+  }
+}
+
+options(scipen=999) # not scientific notation
+```
+
+# Introduction 
+
+The data for this assignment come from CalEnviroScreen 4.0, a mapping and data tool
+produced by the California Office of Environmental Health Hazards Assessment (OEHHA). The
+data are compiled and constructed from a variety of sources and cover all 8,035 census tracts in California. Source: https://oehha.ca.gov/calenviroscreen/report/calenviroscreen-40
+
+For the assignment, you will need the following variables: CensusTract, TotalPopulation,
+CaliforniaCounty (the county where the census tract is located), LowBirthWeight (percent of
+census tract births with weight less than 2500g), PM25 (ambient concentrations of PM2.5 in the
+census tract, in micrograms per cubic meters), and Poverty (percent of population in the census tract living below twice the federal poverty line).
+
+# What is the average concentration of PM2.5 across all census tracts in California?
+```{r}
+
+```
+
+# What county has the highest level of poverty in California?
+
+# Make a histogram depicting the distribution of percent low birth weight and PM2.5
+
+# Estimate a OLS regression of LowBirthWeight on PM25. Report the estimated slope coefficient and its heteroskedasticity-robust standard error. Interpret the estimated slope coefficient. Is the effect of PM25 on LowBirthWeight statistically significant at the 5%?
+
+# Suppose a new air quality policy is expected to reduce PM2.5 concentration by 2 micrograms per cubic meters. Predict the new average value of LowBirthWeight and derive its 95% confidence interval. Interpret the 95% confidence interval.
+
+# Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
+
+# From the regression in (f), test the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty
