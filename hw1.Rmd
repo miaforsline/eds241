@@ -85,7 +85,7 @@ Select variables of interest
              poverty)
 ```
 
-# What is the average concentration of PM2.5 across all census tracts in California?
+# (a) What is the average concentration of PM2.5 across all census tracts in California?
 
 ```{r}
 mean_pm2.5 <- mean(data_clean$pm2_5) %>% 
@@ -94,7 +94,7 @@ mean_pm2.5 <- mean(data_clean$pm2_5) %>%
 
 \noindent The mean concentration of PM2.5 across all census tracts in California is `r mean_pm2.5` µg/m^3^.
 
-# What county has the highest level of poverty in California?
+# (b) What county has the highest level of poverty in California?
 
 \noindent Drop counties with NA values for poverty
 
@@ -109,7 +109,7 @@ max_pov_county <- max_pov_county$california_county
 
 \noindent `r max_pov_county` is the county with the highest level of poverty in California.
 
-# Make a histogram depicting the distribution of percent low birth weight and PM2.5
+# (c) Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
 ```{r}
 
@@ -144,7 +144,7 @@ p1 / p2
 
 \noindent Figure 1 shows the distributions of % birth weights \< 2500g and ambient concentrations of PM2.5 (µg/m^3^) per census tract. Low birth weight data are approximately normally distributed while PM2.5 data is bimodal. Data is sourced from CalEnviroScreen 4.0.
 
-# Estimate a OLS regression of LowBirthWeight on PM25. Report the estimated slope coefficient and its heteroskedasticity-robust standard error. Interpret the estimated slope coefficient.Is the effect of PM25 on LowBirthWeight statistically significant at the 5%?
+# (d) Estimate a OLS regression of LowBirthWeight on PM25. Report the estimated slope coefficient and its heteroskedasticity-robust standard error. Interpret the estimated slope coefficient.Is the effect of PM25 on LowBirthWeight statistically significant at the 5%?
 
 \noindent To analyze the relationship between Low Birth Weight and PM2.5, we estimate the following regression:
 
@@ -159,34 +159,33 @@ p1 / p2
 \medskip
 
 ```{r}
-mdl <- lm(low_birth_weight ~ pm2_5, data=data_clean)
+mdl <- lm_robust(low_birth_weight ~ pm2_5, data=data_clean) %>% 
+  broom::tidy()
 ```
 
-\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl$coefficients[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl$coefficients[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value \<\<\< 0.05.
+\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl$estimate[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl$estimate[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value \<\<\< 0.05. The standard error for PM2.5 ($\beta_1$) = `r mdl$std.error`. 
 
-# Suppose a new air quality policy is expected to reduce PM2.5 concentration by 2 µg/m^3^ Predict the new average value of LowBirthWeight and derive its 95% confidence interval. Interpret the 95% confidence interval.
+# (e) Suppose a new air quality policy is expected to reduce PM2.5 concentration by 2 µg/m^3^ Predict the new average value of LowBirthWeight and derive its 95% confidence interval. Interpret the 95% confidence interval.
 
 ```{r}
-int = mdl$coefficients[1]
-b1 = mdl$coefficients[2]
+int = mdl$estimate[1]
+b1 = mdl$estimate[2]
 x = -2
-y = mdl$coefficients[1] + mdl$coefficients[2] * x
-
-ci <- confint(object = mdl, parm = "pm2_5", level = 0.95)
-
+y = mdl$estimate[1] + mdl$estimate[2] * x
 ```
 
-\noindent Given the equation: PM2.5 = `r mdl$coefficients[1]` + `r mdl$coefficients[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y`%.
+\noindent Given the equation: PM2.5 = `r mdl$estimate[1]` + `r mdl$estimate[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y`%.
 
-\noindent The 95% confidence interval is bounded by `r ci[1]` and `r ci[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
+\noindent The 95% confidence interval is bounded by `r mdl$conf.high[2]` and `r mdl$low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
 
-# Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
+# (f) Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
 
 ```{r}
-mdl2 <- lm(low_birth_weight ~ pm2_5 + poverty, data=data_clean)
+mdl2 <- lm_robust(low_birth_weight ~ pm2_5 + poverty, data=data_clean) %>% 
+  broom::tidy()
 ```
 
-\noindent The estimated slope coefficient for Poverty ($\beta_2$) = `r mdl2$coefficients[3]`, meaning that a 1 µg/^3^ change in Poverty on average increases Low Birth Rate by `r mdl2$coefficients[3]`. Compared to the prior model, the slope coefficient of PM2.5 ($\beta_1$) has decreased from `r mdl$coefficients[2]`to `r mdl2$coefficients[2]` because Poverty helps explain some of the change in Low Birth Weight. In other words, the prior model suffered from omitted variables bias and caused us to overestimate the impact of PM2.5 alone on Low Birth Weight.
+\noindent The estimated slope coefficient for Poverty ($\beta_2$) = `r mdl2$estimate[3]`, meaning that a 1% change in Poverty on average increases Low Birth Rate by `r mdl2$estimate[3]`. Compared to the prior model, the slope coefficient of PM2.5 ($\beta_1$) has decreased from `r mdl$estimate[2]`to `r mdl2$estimate[2]` because Poverty helps explain some of the change in Low Birth Weight. In other words, the prior model suffered from omitted variables bias and caused us to overestimate the impact of PM2.5 alone on Low Birth Weight.
 
 \noindent Table 1 shows the estimated coefficients from estimating equation (1).
 
@@ -199,18 +198,18 @@ stargazer(mdl, mdl2, type = "latex", ci=FALSE, no.space = TRUE,
 
 ```
 
-# From the regression in (f), test the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty
+# (g) From the regression in (f), test the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty
 
 \noindent H~0~: PM2.5 = Poverty
 
 \noindent H~A~: PM2.5 $\neq$ Poverty
 
 ```{r}
-mdl3 <- linearHypothesis(model = mdl2, 
-                 hypothesis.matrix = c("pm2_5 - poverty = 0"), 
-                 white.adjust = "hc2")
-
-p <- mdl3$`Pr(>F)`[2]
+# mdl3 <- linearHypothesis(model = mdl2, 
+#                  hypothesis.matrix = c("pm2_5 - poverty = 0"), 
+#                  white.adjust = "hc2")
+# 
+# p <- mdl3$`Pr(>F)`[2]
 ```
 
-\noindent Since the p-value = `r p` < 0.05, we can reject the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty on Low Birth Weight. 
+
