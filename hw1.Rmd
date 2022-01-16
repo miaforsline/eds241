@@ -112,7 +112,6 @@ max_pov_county <- max_pov_county$california_county
 # (c) Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
 ```{r}
-
 pm_lab <- expression(paste("PM2.5 (µg/m"^"3",")")) 
 
 p1 <- ggplot(data = data_clean) + 
@@ -159,38 +158,42 @@ p1 / p2
 \medskip
 
 ```{r}
-mdl <- lm_robust(low_birth_weight ~ pm2_5, data=data_clean) %>% 
+mdl <- lm_robust(low_birth_weight ~ pm2_5, data=data_clean) 
+
+mdl_clean <- mdl %>% 
   broom::tidy()
 ```
 
-\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl$estimate[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl$estimate[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value \<\<\< 0.05. The standard error for PM2.5 ($\beta_1$) = `r mdl$std.error`. 
+\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl_clean$estimate[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl_clean$estimate[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value \<\<\< 0.05. The standard error for PM2.5 ($\beta_1$) = `r mdl_clean$std.error[2]`. 
 
 # (e) Suppose a new air quality policy is expected to reduce PM2.5 concentration by 2 µg/m^3^ Predict the new average value of LowBirthWeight and derive its 95% confidence interval. Interpret the 95% confidence interval.
 
 ```{r}
-int = mdl$estimate[1]
-b1 = mdl$estimate[2]
+int = mdl_clean$estimate[1]
+b1 = mdl_clean$estimate[2]
 x = -2
-y = mdl$estimate[1] + mdl$estimate[2] * x
+y = mdl_clean$estimate[1] + mdl_clean$estimate[2] * x
 ```
 
-\noindent Given the equation: PM2.5 = `r mdl$estimate[1]` + `r mdl$estimate[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y`%.
+\noindent Given the equation: PM2.5 = `r mdl_clean$estimate[1]` + `r mdl_clean$estimate[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y` %.
 
-\noindent The 95% confidence interval is bounded by `r mdl$conf.high[2]` and `r mdl$low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
+\noindent The 95% confidence interval is bounded by `r mdl_clean$conf.high[2]` and `r mdl_clean$low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
 
 # (f) Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
 
 ```{r}
-mdl2 <- lm_robust(low_birth_weight ~ pm2_5 + poverty, data=data_clean) %>% 
+mdl2 <- lm_robust(low_birth_weight ~ pm2_5 + poverty, data=data_clean) 
+
+mdl2_clean <- mdl2 %>% 
   broom::tidy()
 ```
 
-\noindent The estimated slope coefficient for Poverty ($\beta_2$) = `r mdl2$estimate[3]`, meaning that a 1% change in Poverty on average increases Low Birth Rate by `r mdl2$estimate[3]`. Compared to the prior model, the slope coefficient of PM2.5 ($\beta_1$) has decreased from `r mdl$estimate[2]`to `r mdl2$estimate[2]` because Poverty helps explain some of the change in Low Birth Weight. In other words, the prior model suffered from omitted variables bias and caused us to overestimate the impact of PM2.5 alone on Low Birth Weight.
+\noindent The estimated slope coefficient for Poverty ($\beta_2$) = `r mdl2_clean$estimate[3]`, meaning that a 1% change in Poverty on average increases Low Birth Rate by `r mdl2_clean$estimate[3]`. Compared to the prior model, the slope coefficient of PM2.5 ($\beta_1$) has decreased from `r mdl2_clean$estimate[2]`to `r mdl2$estimate[2]` because Poverty helps explain some of the change in Low Birth Weight. In other words, the prior model suffered from omitted variables bias and caused us to overestimate the impact of PM2.5 alone on Low Birth Weight.
 
 \noindent Table 1 shows the estimated coefficients from estimating equation (1).
 
 ```{r , results = 'asis', echo = FALSE}
-stargazer(mdl, mdl2, type = "latex", ci=FALSE, no.space = TRUE, 
+stargazer(mdl_clean, mdl2_clean, type = "latex", ci=FALSE, no.space = TRUE, 
           header = FALSE, omit = c("Constant"), omit.stat = c("adj.rsq","ser", "f"),
           covariate.labels = c("PM2.5", "Poverty"), dep.var.labels = c("LBW"),
           dep.var.caption = c(""),
