@@ -205,11 +205,11 @@ stargazer(mdl, mdl2, type = "latex", ci=FALSE, no.space = TRUE,
 \noindent H~A~: PM2.5 $\neq$ Poverty
 
 ```{r}
-# mdl3 <- linearHypothesis(model = mdl2, 
-#                  hypothesis.matrix = c("pm2_5 - poverty = 0"), 
-#                  white.adjust = "hc2")
-# 
-# p <- mdl3$`Pr(>F)`[2]
+mdl3 <- linearHypothesis(model = mdl2,
+                 hypothesis.matrix = c("pm2_5 - poverty = 0"),
+                 white.adjust = "hc2")
+
+p <- mdl3$`Pr(>F)`[2]
 ```
 
-
+\noindent Since the p-value = `r p` < 0.05, we can reject the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty on Low Birth Weight. 
