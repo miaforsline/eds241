@@ -96,9 +96,9 @@ mean_pm2.5 <- mean(data_clean$pm2_5) %>%
 
 # (b) What county has the highest level of poverty in California?
 
-\noindent Drop counties with NA values for poverty
-
-
+- Drop counties with NA values for poverty
+- Group by California county 
+- Take a weighted averaged based on total population of each census tract 
 
 ```{r}
 data_pov <- data_clean %>% 
@@ -107,9 +107,13 @@ data_pov <- data_clean %>%
 mean_pov <- data_pov %>% 
   group_by(california_county) %>% 
   summarize(weighted_mean = weighted.mean(poverty, total_population))
+
+county <- subset(mean_pov, weighted_mean == max(mean_pov$weighted_mean))
+county <- county[1]
+max <- max(mean_pov$weighted_mean)
 ```
 
-\noindent In California, `r mean_pov$california_county[1]` is the county with the highest average poverty rate weighted by census tract total population. 
+\noindent In California, `r county` is the county with the highest average poverty rate weighted by census tract total population with a rate of `r max` %. 
 
 # (c) Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
