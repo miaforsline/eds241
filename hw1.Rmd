@@ -55,7 +55,7 @@ library(car)
 
 -   census tract ID,
 
--   total population,
+-   total population per census tract,
 
 -   California county name (the county where the census tract is located),
 
@@ -70,13 +70,13 @@ library(car)
 Select variables of interest
 
 ```{r}
-    data <- read_csv(here("data", "CES4.csv"))
+data <- read_csv(here("data", "CES4.csv"))
 
-    data_clean <- data %>% 
+data_clean <- data %>% 
       clean_names()
 
 
-    data_clean <- data_clean %>% 
+data_clean <- data_clean %>% 
       select(census_tract,
              california_county,
              total_population,
@@ -98,16 +98,18 @@ mean_pm2.5 <- mean(data_clean$pm2_5) %>%
 
 \noindent Drop counties with NA values for poverty
 
+
+
 ```{r}
 data_pov <- data_clean %>% 
   drop_na(poverty)
 
-max_pov_county <- subset(data_pov, poverty == max(data_pov$poverty))
-max_pov_county <- max_pov_county$california_county
-
+mean_pov <- data_pov %>% 
+  group_by(california_county) %>% 
+  summarize(weighted_mean = weighted.mean(poverty, total_population))
 ```
 
-\noindent `r max_pov_county` is the county with the highest level of poverty in California.
+\noindent In California, `r mean_pov$california_county[1]` is the county with the highest average poverty rate weighted by census tract total population. 
 
 # (c) Make a histogram depicting the distribution of percent low birth weight and PM2.5
 
@@ -170,9 +172,19 @@ mdl_clean <- mdl %>%
 
 ```{r}
 int = mdl_clean$estimate[1]
-b1 = mdl_clean$estimate[2]
+b1 = mdl_clean$estimate[2] #change in Y per 1 unit change in X 
 x = -2
 y = mdl_clean$estimate[1] + mdl_clean$estimate[2] * x
+
+#confidence interval: multiple -2 * confidence interval 
+##confidence interval = equation --> doubles SE and 
+### calculate ci by hand 
+
+#lowbirth_mean <- mean(data$lowbirthweight)
+#change_lowbirth <- 2 * model$coefficient["pm2.5]
+#new_lowbirth <- lowbirth_mean + change_lowbirth 
+#new lowbrith < lowbirth_mean 
+
 ```
 
 \noindent Given the equation: PM2.5 = `r mdl_clean$estimate[1]` + `r mdl_clean$estimate[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y` %.
@@ -193,8 +205,17 @@ mdl2_clean <- mdl2 %>%
 \noindent Table 1 shows the estimated coefficients from estimating equation (1).
 
 ```{r , results = 'asis', echo = FALSE}
+#model_1 <- lm(mpg ~ wt, data=clean_data)
+#model_2 <- lm(mpg ~ wt + cyl, data=clean_data)
+
+#robust_se2 <- starprep(mdl) #calculates standard robust errors 
+#stargazer(model, se = robust_se2)
+
 stargazer(mdl_clean, mdl2_clean, type = "latex", ci=FALSE, no.space = TRUE, 
-          header = FALSE, omit = c("Constant"), omit.stat = c("adj.rsq","ser", "f"),
+          header = FALSE, omit = c("Constant"), omit.stat = c("adj.rsq",
+                                                              "ser", 
+                                                              "f",
+                                                              "conf.low"),
           covariate.labels = c("PM2.5", "Poverty"), dep.var.labels = c("LBW"),
           dep.var.caption = c(""),
           title = "PM2.5 and Poverty associate with Low Birth Rate in California census tracts", table.placement = "H")
