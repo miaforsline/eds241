@@ -185,11 +185,14 @@ y = mdl_clean$estimate[1] + mdl_clean$estimate[2] * x
 #new_lowbirth <- lowbirth_mean + change_lowbirth 
 #new lowbrith < lowbirth_mean 
 
+ci <- confint(object = mdl, parm = "pm2_5", level = 0.95)
+ci
+
 ```
 
-\noindent Given the equation: PM2.5 = `r mdl_clean$estimate[1]` + `r mdl_clean$estimate[2]` \* LowBirthWeight, if PM2.5 is reduced by 2, then we predict the Low Birth Rate to be approximately `r y` %.
+\noindent Given the equation: PM2.5 = `r mdl_clean$estimate[1]` + `r mdl_clean$estimate[2]` \* LowBirthWeight, if we want to predict a change in average Low Birth Weight due to a 2 µg/m^3^ decrease in PM2.5, then we predict the Low Birth Rate to be approximately `r y` %.
 
-\noindent The 95% confidence interval is bounded by `r mdl_clean$conf.high[2]` and `r mdl_clean$low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
+\noindent The 95% confidence interval is bounded by `r mdl_clean$conf.high[2]` and `r mdl_clean$conf.low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
 
 # (f) Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
 
@@ -205,17 +208,22 @@ mdl2_clean <- mdl2 %>%
 \noindent Table 1 shows the estimated coefficients from estimating equation (1).
 
 ```{r , results = 'asis', echo = FALSE}
-#model_1 <- lm(mpg ~ wt, data=clean_data)
-#model_2 <- lm(mpg ~ wt + cyl, data=clean_data)
+mod1 <- lm(low_birth_weight ~ pm2_5, data=data_clean)
+mod2 <- lm(low_birth_weight ~ pm2_5 + poverty, data=data_clean)
 
-#robust_se2 <- starprep(mdl) #calculates standard robust errors 
-#stargazer(model, se = robust_se2)
+robust_se <- starprep(mdl, mdl2) #use heteroskedasticity-robust standard errors in the table 
 
-stargazer(mdl_clean, mdl2_clean, type = "latex", ci=FALSE, no.space = TRUE, 
-          header = FALSE, omit = c("Constant"), omit.stat = c("adj.rsq",
-                                                              "ser", 
-                                                              "f",
-                                                              "conf.low"),
+#feed lm models into stargazer()
+stargazer(mod1, mod2, 
+          type = "latex", 
+          ci=FALSE, 
+          se = robust_se,
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"), 
+          omit.stat = c("adj.rsq",
+                        "ser", 
+                        "f"),
           covariate.labels = c("PM2.5", "Poverty"), dep.var.labels = c("LBW"),
           dep.var.caption = c(""),
           title = "PM2.5 and Poverty associate with Low Birth Rate in California census tracts", table.placement = "H")
@@ -233,7 +241,7 @@ mdl3 <- linearHypothesis(model = mdl2,
                  hypothesis.matrix = c("pm2_5 - poverty = 0"),
                  white.adjust = "hc2")
 
-p <- mdl3$`Pr(>F)`[2]
+p <- round(mdl3$`Pr(>Chisq)`[2], 6)
 ```
 
 \noindent Since the p-value = `r p` < 0.05, we can reject the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty on Low Birth Weight. 
