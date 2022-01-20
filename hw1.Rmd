@@ -170,33 +170,7 @@ mdl_clean <- mdl %>%
   broom::tidy()
 ```
 
-\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl_clean$estimate[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl_clean$estimate[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value \<\<\< 0.05. The standard error for PM2.5 ($\beta_1$) = `r mdl_clean$std.error[2]`. 
-
-# (e) Suppose a new air quality policy is expected to reduce PM2.5 concentration by 2 µg/m^3^ Predict the new average value of LowBirthWeight and derive its 95% confidence interval. Interpret the 95% confidence interval.
-
-```{r}
-int = mdl_clean$estimate[1]
-b1 = mdl_clean$estimate[2] #change in Y per 1 unit change in X 
-x = -2
-y = mdl_clean$estimate[1] + mdl_clean$estimate[2] * x
-
-#confidence interval: multiple -2 * confidence interval 
-##confidence interval = equation --> doubles SE and 
-### calculate ci by hand 
-
-#lowbirth_mean <- mean(data$lowbirthweight)
-#change_lowbirth <- 2 * model$coefficient["pm2.5]
-#new_lowbirth <- lowbirth_mean + change_lowbirth 
-#new lowbrith < lowbirth_mean 
-
-ci <- confint(object = mdl, parm = "pm2_5", level = 0.95)
-ci
-
-```
-
-\noindent Given the equation: PM2.5 = `r mdl_clean$estimate[1]` + `r mdl_clean$estimate[2]` \* LowBirthWeight, if we want to predict a change in average Low Birth Weight due to a 2 µg/m^3^ decrease in PM2.5, then we predict the Low Birth Rate to be approximately `r y` %.
-
-\noindent The 95% confidence interval is bounded by `r mdl_clean$conf.high[2]` and `r mdl_clean$conf.low[2]`, meaning we are 95% confident that the true parameter $\beta_1$ lies within this interval.
+\noindent The estimated slope coefficient for PM2.5 ($\beta_1$) = `r mdl_clean$estimate[2]`, meaning that a 1 µg/m^3^ change in PM2.5 on average increases the low birth rate by `r mdl_clean$estimate[2]`. At the 5% significance level, the effect of PM2.5 on low birth rate is statistically significant because the p-value < 0.05. The heteroskedasticity-robust standard error for PM2.5 ($\beta_1$) = `r mdl_clean$std.error[2]`. 
 
 # (f) Add the variable Poverty as an explanatory variable to the regression in (d). Interpret the estimated coefficient on Poverty. What happens to the estimated coefficient on PM25, compared to the regression in (d). Explain.
 
@@ -247,5 +221,7 @@ mdl3 <- linearHypothesis(model = mdl2,
 
 p <- round(mdl3$`Pr(>Chisq)`[2], 6)
 ```
+
+
 
 \noindent Since the p-value = `r p` < 0.05, we can reject the null hypothesis that the effect of PM2.5 is equal to the effect of Poverty on Low Birth Weight. 
