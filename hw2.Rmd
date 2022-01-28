@@ -35,3 +35,13 @@ library(here)
 data <- readxl::read_excel(here("data", "NBP.xls"))
 ```
 
+# (a) Make a histogram depicting the distribution of Dnox_masstons.
+
+# (b) Create an indicator =1 if the county has PctBlack above the sample median, and =0 otherwise (in the rest of the assignment, I refer to this variable as ‘D’). What is the average of PctBlack for counties above the median, i.e. counties for which D=1?
+
+# (c) Estimate a regression of Dnox_masstons on NBP. Interpret the estimated intercept and the coefficient on NBP.
+
+# (d) Create an interaction between the variables NBP and D. Estimate a regression of Dnox_masstons on NBP, D, and this interaction. Interpret each estimated regression coefficient, including the intercept.
+
+# (e) What is the predicted Dnox_masstons in a county that was not regulated under NBP and where PctBlack is above the sample median (i.e., where D=1)? Report the 95% confidence interval for this prediction. Make sure to use “heteroskedasticity-robust” standard errors.
+
