@@ -1,0 +1,37 @@
+---
+title: "EDS 241 Assignment 2"
+author: "Mia Forsline"
+date: "2/4/2022"
+output: 
+  html_document:
+    theme: flatly
+    code_folding: hide
+    toc: true
+    toc_float: true
+    number_sections: false 
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
+                      echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE)
+```
+
+# Set Up 
+
+```{r}
+library(tidyverse)
+library(here)
+```
+
+# Read in data 
+- `fips`: FIPS code identifying each county
+- `NPB`: 1 indicates if the county was regulated under the NO~x~ Budget Program 
+- `PctBlack`: fraction of the county population that is African American
+- `Dnox_masstons`: change in annual NO~x~ emissions from all power plants in a county between 2000 - 2008 in tons 
+  - if `Dnox_masstons` < 0, then the NO~x~ emissions from power plants declined in that county 
+```{r}
+data <- readxl::read_excel(here("data", "NBP.xls"))
+```
+
