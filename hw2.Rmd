@@ -12,8 +12,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 4, fig.height = 3, 
-                      echo = TRUE, 
+knitr::opts_chunk$set(echo = TRUE, 
                       message = FALSE, 
                       warning = FALSE)
 ```
@@ -21,8 +20,31 @@ knitr::opts_chunk$set(fig.width = 4, fig.height = 3,
 # Set Up 
 
 ```{r}
-library(tidyverse)
-library(here)
+packages=c("cowplot",
+           "datasets", 
+           "dplyr",
+           "estimatr",
+           "here", 
+           "ggplot2",
+           "janitor",
+           "stargazer", 
+           "stringr",
+           "tibble",
+           "tidyverse",
+           "tidyr", 
+           "tinytex"
+           )
+
+for (i in packages) {
+  if (require(i,character.only=TRUE)==FALSE) {
+    install.packages(i,repos='http://cran.us.r-project.org')
+  }
+  else {
+    require(i,character.only=TRUE)
+  }
+}
+
+options(scipen=999) # not scientific notation
 ```
 
 # Read in data 
@@ -33,13 +55,47 @@ library(here)
   - if `Dnox_masstons` < 0, then the NO~x~ emissions from power plants declined in that county 
 ```{r}
 data <- readxl::read_excel(here("data", "NBP.xls"))
+
+data_clean <- data %>% 
+  janitor::clean_names()
 ```
 
 # (a) Make a histogram depicting the distribution of Dnox_masstons.
 
+```{r}
+nox_lab <- expression(paste("Change in annual NOx"["3"]," emissions from 2000 - 2008 (tons)"))
+
+ggplot(data = data_clean, aes(x = dnox_masstons)) + 
+  geom_histogram() + 
+  theme_classic() + 
+  labs(x = nox_lab, 
+       y = "Frequency")
+```
+
+
 # (b) Create an indicator =1 if the county has PctBlack above the sample median, and =0 otherwise (in the rest of the assignment, I refer to this variable as ‘D’). What is the average of PctBlack for counties above the median, i.e. counties for which D=1?
 
+```{r}
+median <- median(data_clean$pct_black)
+
+data_d <- data_clean %>% 
+  mutate(D = case_when(
+    pct_black > median ~ 1,
+    pct_black <= median ~ 0)
+    )
+
+data_above_median <- subset(data_d, D == 1)
+avg_pct_black <- mean(data_above_median$pct_black)
+```
+
+For counties with a percentage of Black residents above the median, the average percentage of Black individuals is `r avg_pct_black`. 
+
 # (c) Estimate a regression of Dnox_masstons on NBP. Interpret the estimated intercept and the coefficient on NBP.
+
+```{r}
+lm_robust(dnox_masstons ~ nbp, data = data_d)
+```
+
 
 # (d) Create an interaction between the variables NBP and D. Estimate a regression of Dnox_masstons on NBP, D, and this interaction. Interpret each estimated regression coefficient, including the intercept.
 
