@@ -81,7 +81,9 @@ median <- median(data_clean$pct_black)
 data_d <- data_clean %>% 
   mutate(D = case_when(
     pct_black > median ~ 1,
-    pct_black <= median ~ 0)
+    pct_black <= median ~ 0), 
+    D = as.factor(D), 
+    nbp = as.factor(nbp)
     )
 
 data_above_median <- subset(data_d, D == 1)
@@ -93,11 +95,47 @@ For counties with a percentage of Black residents above the median, the average 
 # (c) Estimate a regression of Dnox_masstons on NBP. Interpret the estimated intercept and the coefficient on NBP.
 
 ```{r}
-lm_robust(dnox_masstons ~ nbp, data = data_d)
+mod <- lm_robust(dnox_masstons ~ nbp, data = data_d)
+summary(mod)
+abs_value_intercept <- round(mod$coefficients[[1]] * -1, digits = 2)
+npb <- round(mod$coefficients[[2]] * -1, digits = 2)
 ```
 
+In this case, we estimated the effect of the categorical independent variable `npb` on the numerican dependent variable `dnox_masstons`. 
+
+The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program reported a `r abs_value_intercept` tons decrease in annual NO~x~ emissions from all power plants in the county from 2000 to 2008. 
+
+The `npb` coefficient tells us that, on average, counties that participated in the NO~x~ Budget Program reported `r npb` tons less tons of annual NO~x~ emissions from all power plants in the county from 2000 to 2008 compared to counties that did not participate in the NO~x~ Budget Program. 
 
 # (d) Create an interaction between the variables NBP and D. Estimate a regression of Dnox_masstons on NBP, D, and this interaction. Interpret each estimated regression coefficient, including the intercept.
 
+```{r}
+mod2 <- lm_robust(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
+summary(mod2)
+abs_value_intercept <- round(mod2$coefficients[[1]] * -1, digits = 2)
+npb_coefficient <- round(mod2$coefficients[[2]] * -1, digits = 2)
+D_coefficient <- round(mod2$coefficients[[3]] * -1, digits = 2)
+interaction <- round(mod2$coefficients[[4]], digits = 2)
+```
+
+The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported a `r abs_value_intercept` tons decrease in annual NO~x~ emissions from all power plants in the county from 2000 to 2008. 
+
+The `npb` coefficient tells us that, on average, counties that *participated* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported `r npb_coefficient` less tons of annual NO~x~ emissions compared to counties that *did not participate* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value. 
+
+The `D` coefficient tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value reported `r D_coefficient` less tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value. 
+
+The interaction tells us that, on average, counties that *participated* in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value reported `r npb_coefficient` more tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value. 
+
 # (e) What is the predicted Dnox_masstons in a county that was not regulated under NBP and where PctBlack is above the sample median (i.e., where D=1)? Report the 95% confidence interval for this prediction. Make sure to use “heteroskedasticity-robust” standard errors.
 
+```{r}
+mod2 <- lm_robust(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
+
+pred_constraints=data.frame(nbp=c("0"), D=c("0"))
+
+pred <- predict(mod2, newdata=pred_constraints, se.fit=TRUE, interval='confidence')
+lower <- round(pred$fit[2], digits = 2)
+upper <- round(pred$fit[3], digits = 2)
+```
+
+The 95% confidence interval is bounded by a lower bount of `r lower` and an upper bound of `r upper`. 
