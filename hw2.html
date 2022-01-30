@@ -1682,8 +1682,8 @@ data_d &lt;- data_clean %&gt;%
     )
 
 data_above_median &lt;- subset(data_d, D == 1)
-avg_pct_black &lt;- mean(data_above_median$pct_black)</code></pre>
-<p>For counties with a percentage of Black residents above the median, the average percentage of Black individuals is 19.31375.</p>
+avg_pct_black &lt;- round(mean(data_above_median$pct_black), digits = 2) </code></pre>
+<p>For counties with a percentage of Black residents above the median, the average percentage of Black individuals is 19.31.</p>
 </div>
 <div id="c-estimate-a-regression-of-dnox_masstons-on-nbp.-interpret-the-estimated-intercept-and-the-coefficient-on-nbp." class="section level1">
 <h1>(c) Estimate a regression of Dnox_masstons on NBP. Interpret the estimated intercept and the coefficient on NBP.</h1>
@@ -1737,18 +1737,18 @@ interaction &lt;- round(mod2$coefficients[[4]], digits = 2)</code></pre>
 <p>The intercept value tells us that, on average, counties that did not participate in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American below the median value reported a 2.42 tons decrease in annual NO<sub>x</sub> emissions from all power plants in the county from 2000 to 2008.</p>
 <p>The <code>npb</code> coefficient tells us that, on average, counties that <em>participated</em> in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American below the median value reported 7.14 less tons of annual NO<sub>x</sub> emissions compared to counties that <em>did not participate</em> in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American below the median value.</p>
 <p>The <code>D</code> coefficient tells us that, on average, counties that did not participate in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American <em>below</em> the median value reported 2.59 less tons of annual NO<sub>x</sub> emissions compared to counties that did not participate in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American <em>over</em> the median value.</p>
-<p>The interaction tells us that, on average, counties that <em>participated</em> in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American <em>over</em> the median value reported 7.14 more tons of annual NO<sub>x</sub> emissions compared to counties that did not participate in the NO<sub>x</sub> Budget Program and have a fraction of the county population that is African American <em>below</em> the median value.</p>
+<p>The interaction tells us that, on average that: a) counties that <em>participated</em> in the NO<sub>x</sub> Budget Program, regardless of their fraction of the county population that is African American b) counties that have a fraction of the county population that is African American <em>over</em> the median reported value of 7.14, regardless of whether they participated in the NO<sub>x</sub> Budget Program c) and counties that participated in the NO<sub>x</sub> Budget Program <em>and</em> have a fraction of the county population that is African American above the median value reported 6.37 more tons of annual NO<sub>x</sub> emissions from all power plants from 2000 to 2008.</p>
 </div>
 <div id="e-what-is-the-predicted-dnox_masstons-in-a-county-that-was-not-regulated-under-nbp-and-where-pctblack-is-above-the-sample-median-i.e.-where-d1-report-the-95-confidence-interval-for-this-prediction.-make-sure-to-use-heteroskedasticity-robust-standard-errors." class="section level1">
 <h1>(e) What is the predicted Dnox_masstons in a county that was not regulated under NBP and where PctBlack is above the sample median (i.e., where D=1)? Report the 95% confidence interval for this prediction. Make sure to use “heteroskedasticity-robust” standard errors.</h1>
 <pre class="r"><code>mod2 &lt;- lm_robust(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
 
-pred_constraints=data.frame(nbp=c(&quot;0&quot;), D=c(&quot;0&quot;))
+pred_constraints=data.frame(nbp=c(&quot;0&quot;), D=c(&quot;1&quot;))
 
 pred &lt;- predict(mod2, newdata=pred_constraints, se.fit=TRUE, interval=&#39;confidence&#39;)
 lower &lt;- round(pred$fit[2], digits = 2)
 upper &lt;- round(pred$fit[3], digits = 2)</code></pre>
-<p>The 95% confidence interval is bounded by -3.29 and -1.55.</p>
+<p>The 95% confidence interval is bounded by a lower bount of -6.44 and an upper bound of -3.57.</p>
 </div>
 
 

@@ -87,7 +87,7 @@ data_d <- data_clean %>%
     )
 
 data_above_median <- subset(data_d, D == 1)
-avg_pct_black <- mean(data_above_median$pct_black)
+avg_pct_black <- round(mean(data_above_median$pct_black), digits = 2) 
 ```
 
 For counties with a percentage of Black residents above the median, the average percentage of Black individuals is `r avg_pct_black`. 
@@ -124,14 +124,17 @@ The `npb` coefficient tells us that, on average, counties that *participated* in
 
 The `D` coefficient tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value reported `r D_coefficient` less tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value. 
 
-The interaction tells us that, on average, counties that *participated* in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value reported `r npb_coefficient` more tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value. 
+The interaction tells us that, on average that: 
+a) counties that *participated* in the NO~x~ Budget Program, regardless of their fraction of the county population that is African American
+b) counties that have a fraction of the county population that is African American *over* the median reported value of `r npb_coefficient`, regardless of whether they participated in the NO~x~ Budget Program 
+c) and counties that participated in the NO~x~ Budget Program *and* have a fraction of the county population that is African American above the median value reported `r interaction` more tons of annual NO~x~ emissions from all power plants from 2000 to 2008. 
 
 # (e) What is the predicted Dnox_masstons in a county that was not regulated under NBP and where PctBlack is above the sample median (i.e., where D=1)? Report the 95% confidence interval for this prediction. Make sure to use “heteroskedasticity-robust” standard errors.
 
 ```{r}
 mod2 <- lm_robust(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
 
-pred_constraints=data.frame(nbp=c("0"), D=c("0"))
+pred_constraints=data.frame(nbp=c("0"), D=c("1"))
 
 pred <- predict(mod2, newdata=pred_constraints, se.fit=TRUE, interval='confidence')
 lower <- round(pred$fit[2], digits = 2)
