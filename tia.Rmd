@@ -1,13 +1,17 @@
 ---
 title: "TIA: simulation of potential outcomes and ignorable treatments"
 author: "Mia Forsline"
-date: "1/27/2022"
+date: "2/1/2022"
 output: html_document
 ---
 
+# Simulating ignorable treatment assignment 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+
+# Set Up 
 
 ```{r}
 library(MASS)
@@ -15,14 +19,14 @@ library(ggplot2)
 library(vtable)
 library(stargazer)
 library(estimatr)
+library(dplyr)
+library(tidyr)
 
-set.seed(7307)
+set.seed(42)
 ```
 
 
 ```{r}
-
-
 bigN=20000
 
 W <- runif(bigN,0,5)
@@ -32,9 +36,10 @@ X2 <- as.numeric(X==2)
 X3 <- as.numeric(X==3)
 X4 <- as.numeric(X==4)
 X5 <- as.numeric(X==5)
+```
 
 
-
+```{r}
 # GENERATE MEAN COMPONENT OF POTENTIAL OUTCOMES
 MU0=(1/2)*X1 + (2/2)*X2 + (3/2)*X3 + (4/2)*X4 + (5/2)*X5
 mean(MU0)
@@ -60,16 +65,16 @@ Y1 <- MU1 + e1
 mean(Y1)
 
 ATE <- mean(Y1)-mean(Y0)
-print(ATE)
+print(ATE) #verify that the average treatment effect = 1.5 (which we artificially set above)
 
 # ASSIGN A TREATMENT IGNORABLE COND ON X
-v <- rnorm(bigN, 0, 2)
-D <- as.numeric((-2*X1+ -1*X2 + 0.5*X3 + 1*X4 + 2*X5 + v)>0)
+v <- rnorm(bigN, 0, 2) #error term 
+D <- as.numeric((-2*X1+ -1*X2 + 0.5*X3 + 1*X4 + 2*X5 + v)>0) #binary treatment D - if it is > 0, you are assigned to treatment group ; if it is < 0, you are assigned to the control group 
 mean(D)
 
 
 # USE SUTVA TO MAP POTENTIAL OUTCOMES INTO OBSERVED OUTCOMES
-Y = D*Y1 + (1-D)*Y0
+Y = D*Y1 + (1-D)*Y0 #maintaining SUTVA assumptions  to observe Y(0) and Y(1) depending on if D = 0 or D = 1 
 
 
 # COLLECT ALL RELEVANT VARIABLES IN A DATAFRAME
@@ -77,12 +82,67 @@ TIA_DATA <- data.frame(D, Y0, Y1, X, X1, X2, X3, X4, X5)
 
 
 # SHOW THAT D IS NOT INDEPENDENT OF X, Y0, Y1 (RECALL Y0,Y1 NOT OBSERVED IN REALITY)
-sumtable(TIA_DATA, vars=c('Y0','Y1', 'X1', 'X2', 'X3', 'X4', 'X5'), group='D', group.test=TRUE)
+sumtable(TIA_DATA, vars=c('Y0','Y1', 'X1', 'X2', 'X3', 'X4', 'X5'), group='D', group.test=TRUE) 
 
+#observations with higher value of Y(1) and higher value of Y(0) are more likely to be in the treatment group 
+#similarly, the mean between the treatment and control groups are not even 
+#thus 
 
 # SIMPLE OLS ESTIMATOR NOT CONSISTENT FOR ATE
-ols <- lm_robust(formula = Y ~ D, data=TIA_DATA)
+ols <- lm_robust(formula = Y ~ D, data=TIA_DATA) #will not be an unbiased estimator of ATE 
 summary(ols)
+#we should be getting 1.5 but we are getting 2.5, proving the biasedness of the OLS estimator 
+#so how can we get an unbiased estimator? 
+## we can control for X u
 
 ```
+
+
+```{r}
+# DIFFERENCE IN MEAN OF OUTCOME Y FOR D=1 AND D=0, BY CELL OF X
+sumtable(TIA_DATA, vars=c('Y', 'X1', 'X2', 'X3', 'X4', 'X5'), group='D', group.test=TRUE)
+#delta of x1 = 
+
+
+TIA_table <- TIA_DATA %>%
+  mutate(Y = ifelse(D==1, Y1,Y0))%>% #Create observed Y variable
+  group_by(X,D)%>% 
+  summarise(n_obs = n(),
+            Y_mean= mean(Y, na.rm = T))%>% #Calculate number of observations and Y mean by X by treatment cells
+  gather(variables, values, n_obs:Y_mean)%>% #Reshape data
+  mutate(variables = paste0(variables,"_",D, sep=""))%>% #Combine the treatment and variables for reshaping
+  pivot_wider(id_cols = X, names_from = variables,values_from = values)%>% #Reshape data by treatment and X cell
+  ungroup()%>%  #Ungroup from X values
+  mutate(Y_diff = Y_mean_1 - Y_mean_0, #calculate Y_diff
+         w_ATE = (n_obs_0+n_obs_1)/(sum(n_obs_0)+sum(n_obs_1)), 
+         w_ATT = n_obs_1/sum(n_obs_1))%>% #calculate weights for treated observations 
+  mutate_if(is.numeric, round, 2) #Round data
+
+
+stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
+
+#as x increases, the number of observations decreases 
+
+# MULTIVARIATE MATCHING ESTIMATES OF ATE AND ATT
+ATE=sum((TIA_table$w_ATE)*(TIA_table$Y_diff)) #avg treatment effect 
+ATE # is close to 1.5, as we expected
+
+ATT=sum((TIA_table$w_ATT)*(TIA_table$Y_diff)) 
+ATT
+
+# MULTIVARIATE MATCHING AS REGRESSION ESTIMATOR
+reg_ate <- lm(formula = Y ~ D + X2 + X3 + X4 + X5, data=TIA_DATA) #regress Y ~ D
+se_models = starprep(reg_ate, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+stargazer(reg_ate, se = se_models, type="text")
+
+#regression estimated 1.495 for D, which is close to the true value of 1.5 
+#the regression re-weights slightly differently 
+
+
+```
+
+
+# Key results 
+- distribution of X (and Y(0) and Y(1)) is no longer balanced across D 
+- OLS of Y ~ D is no longer unbiased for ATE 
 

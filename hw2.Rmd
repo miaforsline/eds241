@@ -3,23 +3,27 @@ title: "EDS 241 Assignment 2"
 author: "Mia Forsline"
 date: "2/4/2022"
 output: 
+  pdf_document:
+    toc: false
+    number_sections: yes
   html_document:
     theme: flatly
-    code_folding: hide
+    code_folding: show
     toc: true
     toc_float: true
     number_sections: false 
+header-includes:
+  - \setlength{\parindent}{1em}
+  - \usepackage{float}
 ---
+
+# Set Up  
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
                       message = FALSE, 
                       warning = FALSE)
-```
 
-# Set Up 
-
-```{r}
 packages=c("cowplot",
            "datasets", 
            "dplyr",
@@ -47,12 +51,16 @@ for (i in packages) {
 options(scipen=999) # not scientific notation
 ```
 
+
 # Read in data 
+Variables: 
+
 - `fips`: FIPS code identifying each county
 - `NPB`: 1 indicates if the county was regulated under the NO~x~ Budget Program 
 - `PctBlack`: fraction of the county population that is African American
 - `Dnox_masstons`: change in annual NO~x~ emissions from all power plants in a county between 2000 - 2008 in tons 
   - if `Dnox_masstons` < 0, then the NO~x~ emissions from power plants declined in that county 
+
 ```{r}
 data <- readxl::read_excel(here("data", "NBP.xls"))
 
@@ -63,15 +71,24 @@ data_clean <- data %>%
 # (a) Make a histogram depicting the distribution of Dnox_masstons.
 
 ```{r}
-nox_lab <- expression(paste("Change in annual NOx"["3"]," emissions from 2000 - 2008 (tons)"))
+nox_lab <- expression(paste("Change in annual NOx"["3"]," emissions 2000 - 2008 (tons)"))
 
-ggplot(data = data_clean, aes(x = dnox_masstons)) + 
+hist <- ggplot(data = data_clean, aes(x = dnox_masstons)) + 
   geom_histogram() + 
   theme_classic() + 
   labs(x = nox_lab, 
        y = "Frequency")
 ```
 
+
+\newpage
+<center>**Figure 1: Histogram of change in annual NO~x~ emissions from all power plants in a county between 2000 and 2008 (in tons)**</center>
+
+```{r , fig.width = 4, fig.height = 3, eval=TRUE, echo=FALSE}
+hist
+```
+
+\noindent Figure 1 shows the skewed distribution of change of annual NO~x~ emissions from 2000 - 2008. There is a long tail to the left, and most of the data centers around zero. Each data point represents one county in California (n = 485). 
 
 # (b) Create an indicator =1 if the county has PctBlack above the sample median, and =0 otherwise (in the rest of the assignment, I refer to this variable as ‘D’). What is the average of PctBlack for counties above the median, i.e. counties for which D=1?
 
@@ -90,41 +107,54 @@ data_above_median <- subset(data_d, D == 1)
 avg_pct_black <- round(mean(data_above_median$pct_black), digits = 2) 
 ```
 
-For counties with a percentage of Black residents above the median, the average percentage of Black individuals is `r avg_pct_black`. 
+\noindent For counties with a percentage of Black residents above the median (n = 240), the average percentage of Black individuals is `r avg_pct_black`%. 
 
 # (c) Estimate a regression of Dnox_masstons on NBP. Interpret the estimated intercept and the coefficient on NBP.
 
 ```{r}
 mod <- lm_robust(dnox_masstons ~ nbp, data = data_d)
-summary(mod)
 abs_value_intercept <- round(mod$coefficients[[1]] * -1, digits = 2)
 npb <- round(mod$coefficients[[2]] * -1, digits = 2)
 ```
 
-In this case, we estimated the effect of the categorical independent variable `npb` on the numerican dependent variable `dnox_masstons`. 
+\noindent The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program reported a `r abs_value_intercept` tons decrease in total NO~x~ emissions from all power plants in the county from 2000 to 2008. 
 
-The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program reported a `r abs_value_intercept` tons decrease in annual NO~x~ emissions from all power plants in the county from 2000 to 2008. 
-
-The `npb` coefficient tells us that, on average, counties that participated in the NO~x~ Budget Program reported `r npb` tons less tons of annual NO~x~ emissions from all power plants in the county from 2000 to 2008 compared to counties that did not participate in the NO~x~ Budget Program. 
+\noindent The `npb` coefficient tells us that, on average, counties that participated in the NO~x~ Budget Program reported a `r npb` tons decrease in total NO~x~ emissions from all power plants in the county from 2000 to 2008 compared to counties that did not participate in the NO~x~ Budget Program. 
 
 # (d) Create an interaction between the variables NBP and D. Estimate a regression of Dnox_masstons on NBP, D, and this interaction. Interpret each estimated regression coefficient, including the intercept.
 
 ```{r}
 mod2 <- lm_robust(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
-summary(mod2)
 abs_value_intercept <- round(mod2$coefficients[[1]] * -1, digits = 2)
 npb_coefficient <- round(mod2$coefficients[[2]] * -1, digits = 2)
 D_coefficient <- round(mod2$coefficients[[3]] * -1, digits = 2)
 interaction <- round(mod2$coefficients[[4]], digits = 2)
 ```
 
-The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported a `r abs_value_intercept` tons decrease in annual NO~x~ emissions from all power plants in the county from 2000 to 2008. 
+\noindent Table 1 shows the estimated coeffients from estimating equation (1). 
 
-The `npb` coefficient tells us that, on average, counties that *participated* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported `r npb_coefficient` less tons of annual NO~x~ emissions compared to counties that *did not participate* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value. 
+```{r , results = 'asis', echo = FALSE}
+mod <- lm(dnox_masstons ~ nbp, data = data_d)
+mod2 <- lm(dnox_masstons ~ nbp + D + nbp*D, data = data_d)
 
-The `D` coefficient tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value reported `r D_coefficient` less tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value. 
+robust_se <- starprep(mod, mod2) #use heteroskedasticity-robust standard errors in the table 
 
-The interaction tells us that, on average that: 
+stargazer(mod, mod2, type = "latex", ci=FALSE, no.space = TRUE, 
+          header = FALSE, omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("NBP", "D", "Interaction"), dep.var.labels = c("NOX (tons)"),
+          dep.var.caption = c(""),
+          title = "Title", table.placement = "H")
+
+```
+
+
+\noindent The intercept value tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported a `r abs_value_intercept` tons decrease in annual NO~x~ emissions from all power plants in the county from 2000 to 2008. 
+
+\noindent The `npb` coefficient tells us that, on average, counties that *participated* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value reported `r npb_coefficient` less tons of annual NO~x~ emissions compared to counties that *did not participate* in the NO~x~ Budget Program and have a fraction of the county population that is African American below the median value. 
+
+\noindent The `D` coefficient tells us that, on average, counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *below* the median value reported `r D_coefficient` less tons of annual NO~x~ emissions compared to counties that did not participate in the NO~x~ Budget Program and have a fraction of the county population that is African American *over* the median value. 
+
+\noindent The interaction tells us that, on average that: 
 a) counties that *participated* in the NO~x~ Budget Program, regardless of their fraction of the county population that is African American
 b) counties that have a fraction of the county population that is African American *over* the median reported value of `r npb_coefficient`, regardless of whether they participated in the NO~x~ Budget Program 
 c) and counties that participated in the NO~x~ Budget Program *and* have a fraction of the county population that is African American above the median value reported `r interaction` more tons of annual NO~x~ emissions from all power plants from 2000 to 2008. 
@@ -141,4 +171,4 @@ lower <- round(pred$fit[2], digits = 2)
 upper <- round(pred$fit[3], digits = 2)
 ```
 
-The 95% confidence interval is bounded by a lower bount of `r lower` and an upper bound of `r upper`. 
+\noindent The 95% confidence interval is bounded by a lower bount of `r lower` and an upper bound of `r upper`. 
