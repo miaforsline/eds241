@@ -127,8 +127,13 @@ stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
 ATE=sum((TIA_table$w_ATE)*(TIA_table$Y_diff)) #avg treatment effect 
 ATE # is close to 1.5, as we expected
 
+#multiply Y_diff * w_ATE (ATE weights) then sum up 
+#
+
 ATT=sum((TIA_table$w_ATT)*(TIA_table$Y_diff)) 
 ATT
+
+#multiply Y_diff * w_ATT (ATT weights - D = 1 pop) then sum up 
 
 # MULTIVARIATE MATCHING AS REGRESSION ESTIMATOR
 reg_ate <- lm(formula = Y ~ D + X2 + X3 + X4 + X5, data=TIA_DATA) #regress Y ~ D
@@ -138,6 +143,7 @@ stargazer(reg_ate, se = se_models, type="text")
 #regression estimated 1.495 for D, which is close to the true value of 1.5 
 #the regression re-weights slightly differently 
 
+#it important that we have observations for D = 1 and D = 0 for each value of X so we can calculate Y_diff 
 
 ```
 
