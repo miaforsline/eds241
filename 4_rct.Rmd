@@ -1,5 +1,5 @@
 ---
-title: "RCT: simulation of potential outcomes and randomly assigned treatement"
+title: "Random Controlled Experiment: simulation of potential outcomes and randomly assigned treatement"
 author: "Mia Forsline"
 date: "1/27/2022"
 output: html_document
