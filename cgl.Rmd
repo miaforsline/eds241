@@ -37,56 +37,86 @@ stargazer(CGL, type="text", digits=2)
 
 ```{r}
 # EXAMINE BALANCE IN COVARIATES
-# COVARIATE MEAN DIFFERENCES by DAPever
+# COVARIATE MEAN DIFFERENCES by DAPever (ITQ binary variable - yes or no)
+
+#regressing 3 covariates (LME, genus, and species) onto DAPever
+##for genus and species, not significant = balanced between treated and not treated groups 
+##however, for LME, the treated and not treated groups are not balanced - so on average, ITQ and non-ITQ fisheries are located in different areas 
+##so we need adjust for differences in LME 
+
 m1 <- lm(formula = LME ~ DAPever, data=CGL)
 m2 <- lm(formula = genus ~ DAPever, data=CGL)
 m3 <- lm(formula = species ~ DAPever, data=CGL)
 se_models = starprep(m1, m2, m3, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 stargazer(m1, m2, m3, se = se_models, type="text")
+```
 
+
+```{r}
 # BOXPLOTS TO EXAMINE BALANCE IN COVARIATES
+#we will have 1 box for D = 1 and D = 0 for each covariate 
+#for LME, we can see the distributions are NOT similar - the overlap is problematic. We cannot compare D = 1 and D = 0 units for all values of LME - so we need to extrapolate via linear regression 
+#for genus and species, the distributions ARE similar - so we can easily compare D = 1 and D = 0 units 
+
 ggplot(CGL, aes(x=as.factor(DAPever), y=LME)) + 
-  geom_boxplot(fill="cyan") + xlab("Ever Collapsed")
+  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
 
 ggplot(CGL, aes(x=as.factor(DAPever), y=genus)) + 
-  geom_boxplot(fill="cyan") + xlab("Ever Collapsed")
+  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
 
 ggplot(CGL, aes(x=as.factor(DAPever), y=species)) + 
-  geom_boxplot(fill="cyan") + xlab("Ever Collapsed")
+  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
+```
 
 
+```{r}
 # BASIC OLS by DAPever -- THEN ADD INDICATORS FOR OTHER COVARIATES 
 # NOTE DO NOT INCLUDE SPECIES IN MODELS TO KEEP RUNNING TIME FAST
-mA <- lm(formula = collapse ~ DAPever, data=CGL)
+
+#for our example, we will just use one dummy for LME and one dummy var for genus - we are omitting species 
+
+mA <- lm(formula = collapse ~ DAPever, data=CGL) #here we calculate a 14.2% collapse 
 mB <- lm(formula = collapse ~ DAPever + as.factor(LME), data=CGL)
-mC <- lm(formula = collapse ~ DAPever + as.factor(LME) + as.factor(genus), data=CGL)
+mC <- lm(formula = collapse ~ DAPever + as.factor(LME) + as.factor(genus), data=CGL) #the % shrinks as we add controls 
 se_models = starprep(mA, mB, mC, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 stargazer(mA, mB, mC, se = se_models, type="text", omit = "(LME)|(genus)|(species)")
+```
 
 
-
+```{r}
 # BASIC PROPENSITY SCORE --- THIS IS A TOY MODEL
 # ESTIMATE PROPENSITY SCORE MODEL AND PREDICT (EPS)
+
+#what is the probability that D = 1 ? 
+
 ps_model <- glm(DAPever ~ LME + genus, family = binomial(), data = CGL)
 summary(ps_model)
-EPS <- predict(ps_model, type = "response")
-PS_WGT <- (CGL$DAPever/EPS) + ((1-CGL$DAPever)/(1-EPS))
+EPS <- predict(ps_model, type = "response") #use estimated logistic equation to create EPS (estimated propensity score)
+PS_WGT <- (CGL$DAPever/EPS) + ((1-CGL$DAPever)/(1-EPS)) #PS_WGT = p-score weight 
+```
 
 
+```{r}
 # COLLECT ALL RELEVANT VARIABLES IN DATAFRAME
 DF <- data.frame(years = CGL$years, collapse = CGL$collapse, DAPever = CGL$DAPever, 
                  LME = CGL$LME, genus = CGL$genus, species = CGL$species, EPS, PS_WGT)
 
 
 # BOXPLOTS TO EXAMINE OVERLAP IN P-SCORE DISTRIBUTIONS
+
+#not perfectly aligned, but reasonably aligned, especially around the median 
+
 ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
-  geom_boxplot(fill="cyan") + xlab("Ever Collapsed")
+  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
 
 
 # WLS USING EPS WEIGHTS
 wls1 <- lm(formula = collapse ~ DAPever, data=DF, weights=PS_WGT)
-wls2 <- lm(formula = collapse ~ DAPever + LME + genus, data=DF, weights=PS_WGT)
+wls2 <- lm(formula = collapse ~ DAPever + LME + genus, data=DF, weights=PS_WGT) #adding linear controls doesn't change the coefficients much 
 se_models = starprep(wls1, wls2, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 stargazer(wls1, wls2, se = se_models, type="text", omit = "(LME)|(genus)|(species)")
+
+# if you don't adjust (-14.2%)
+# if you do adjust, we get a very similar -14.8%, so either there was no bias or the controls removed very little bias 
 ```
 

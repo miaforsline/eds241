@@ -1,0 +1,109 @@
+---
+title: "instrumental variables"
+author: "Mia Forsline"
+date: "2/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(stargazer)
+library(estimatr)
+library(AER)
+library(ggplot2)
+library(cowplot)
+library(sandwich)
+library(lmtest)
+library(dplyr)
+library(lfe)
+library(here)
+
+
+#setwd(dirname(rstudioapi::getActiveDocumentContext()$path)) #Set's directory where script is located
+#getwd()
+```
+
+
+```{r}
+# IMPORT CSV DATA
+FULTON <- read.csv(here("data", "FULTON.csv")) %>%
+  mutate(log_tots = log(tots),
+         log_price = log(pricelevel))
+
+
+# SUMMARY STATISTICS
+stargazer(FULTON, type="text", digits=2)
+#tots = total quantities in lb 
+#pricelevel = $/lb 
+#windspd = m/sec 
+#log_price = continuous 
+```
+
+
+```{r}
+# BASIC OLS REGRESSION
+ols <- lm(formula = log_tots ~ log_price, data=FULTON)
+summary(ols)
+#price = neg = if price increases, the demand decreases 
+```
+
+
+```{r}
+# FIRST_STAGE REGRESSION - JUST-IDENTIFIED MODEL
+fs1 <- lm(formula = log_price ~ windspd, data=FULTON)
+summary(fs1)
+
+#D on Z 
+#what's the effect of the increase of wind speed on the log price of fish ? 
+#if higher winds make it harder to go fishing, we expect the price to increase - which it does 
+#we know our instrument passes the first stage - it is relevant and predicts our endogenous variable 
+#we can think about how the wind might affect supply but it does not affect demand 
+```
+
+
+```{r}
+# TSLS - JUST-IDENTIFIED MODEL 
+## | specifies where we introduce our list of instruments (in this case, wind speed is our instrument)
+tsls1 <- ivreg(log_tots ~ log_price | windspd, data = FULTON)
+summary(tsls1)
+
+#
+```
+
+
+```{r}
+# Calculate robust standard errors for OLS and FS1 using starprep()
+se_ols_fs1 <- starprep(ols,fs1, stat = c("std.error"), se_type = "HC2", alpha = 0.05) 
+
+# Calculate robust standard errors sandwich and lmtest packages (starprep() does not like ivreg() objects)
+se_tsls11 <- coeftest(tsls1, vcov = vcovHC(tsls1, type = "HC2"))[, "Std. Error"]
+
+# Combine standard errors and output results with stargazer()
+se_models <- append(se_ols_fs1,list(se_tsls11))
+stargazer(ols, fs1, tsls1, se = se_models, type="text")
+```
+
+Use the `lfe` package 
+```{r}
+# Estimate the first two models
+ols_felm <- felm(formula = log_tots ~ log_price, data=FULTON)
+fs1_felm <- felm(formula = log_price ~ windspd, data=FULTON)
+
+# Estimate 2SLS
+# "log_tots ~ 1" is not the first stage, it is the all variables in the first stage, BUT the endogenous one
+# | 0 | means that we are not including fixed effects here.
+
+tsls1_felm <- felm(formula = log_tots ~ 1 | 0 | (log_price ~ windspd),  data=FULTON)
+
+# The robust standard errors are calculated (not reported) by default in felm(), so here we can fetch and combine them
+# It might be HC1, but the documentation is not great. 
+
+se_models_felm <- list(ols_felm$rse,fs1_felm$rse, tsls1_felm$rse)
+
+stargazer(ols_felm, fs1_felm, tsls1_felm, se = se_models_felm, type="text")
+
+```
+

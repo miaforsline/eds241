@@ -1,0 +1,53 @@
+---
+title: "EDS 241 Assignment 2"
+author: "Mia Forsline"
+date: "2/20/2022"
+output: 
+  pdf_document:
+    toc: false
+    number_sections: yes
+  html_document:
+    theme: flatly
+    code_folding: show
+    toc: true
+    toc_float: true
+    number_sections: false 
+header-includes:
+  - \setlength{\parindent}{1em}
+  - \usepackage{float}
+---
+
+# Set Up  
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE)
+
+packages=c("cowplot",
+           "datasets", 
+           "dplyr",
+           "estimatr",
+           "here", 
+           "ggplot2",
+           "janitor",
+           "stargazer", 
+           "stringr",
+           "tibble",
+           "tidyverse",
+           "tidyr", 
+           "tinytex"
+           )
+
+for (i in packages) {
+  if (require(i,character.only=TRUE)==FALSE) {
+    install.packages(i,repos='http://cran.us.r-project.org')
+  }
+  else {
+    require(i,character.only=TRUE)
+  }
+}
+
+options(scipen=999) # not scientific notation
+```
+
