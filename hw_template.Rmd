@@ -105,8 +105,13 @@ model_2 <- lm(mpg ~ wt + cyl, data=clean_data)
 \noindent Table 1 shows the estimated coeffients from estimating equation (1). 
 
 ```{r , results = 'asis', echo = FALSE}
-stargazer(model_1, model_2, type = "latex", ci=FALSE, no.space = TRUE, 
-          header = FALSE, omit = c("Constant"), omit.stat = c("adj.rsq","ser", "f"),
+stargazer(model_1, model_2, 
+          type = "latex", 
+          ci=FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"), 
+          omit.stat = c("adj.rsq","ser", "f"),
           covariate.labels = c("Weight (1000 lbs)", "Cylinders"), dep.var.labels = c("MPG"),
           dep.var.caption = c(""),
           title = "MPG and vehicle weight", table.placement = "H")

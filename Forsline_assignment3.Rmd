@@ -70,7 +70,7 @@ options(scipen=999) # not scientific notation
     -   `mage` = mother's age
     -   `meduc` = mother's education
     -   `mblack` = 1 if the mother is Black
-    -   \`alcohol = 1 if the mother consumed alcohol during pregnancy
+    -   `alcohol` = 1 if the mother consumed alcohol during pregnancy
     -   `first` = 1 if this is the mother's first child
     -   `diabete` = 1 if the mother is diabetic
     -   `anemia` = 1 if the mother is anemic
@@ -81,6 +81,15 @@ This homework is a simple examination of these data. More research would be need
 
 ```{r}
 data <- read_csv(here("data", "SMOKING_EDS241.csv"))
+
+data <- data %>% 
+  mutate(mage = as.numeric(mage), 
+         meduc = as.numeric(meduc), 
+         mblack = as.factor(mblack), 
+         alcohol = as.factor(alcohol), 
+         first = as.factor(first), 
+         diabete = as.factor(diabete), 
+         anemia = as.factor(anemia))
 ```
 
 # (a) What is the unadjusted mean difference in birth weight of infants with smoking and nonsmoking mothers?
@@ -108,13 +117,47 @@ ate <- y1 - y0
 
 \noindent The average treatment effect (ATE) is the expected value of $Y(1)$ - $Y(0)$ within the population of interest. Thus, we would hypothesize that for mothers giving birth in Pennsylvania during 1989 - 1991, smoking during pregnancy influences infant birth weight. Specifically, we hypothesize that smoking during pregnancy results in lower infant birth weight.
 
-\noindent \*\*H~0~\*\*: Maternal smoking during pregnancy does not influence infant birth weight ($\mu$ = 0)
+\noindent H~0~: Maternal smoking during pregnancy does not influence infant birth weight ($\mu$ = 0)
 
-\noindent \*\*H~A~\*\*: Maternal smoking during pregnancy does influence infant birth weight ($\mu$ $\neq$ 0)
+\noindent H~A~: Maternal smoking during pregnancy does influence infant birth weight ($\mu$ $\neq$ 0)
 
 \noindent In this case, $Y(1)$ = `r y1` and $Y(0)$ = `r y0`, so the ATE = `r ate`.
 
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
+
+
+\noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g). 
+
+```{r , results = 'asis', echo = FALSE}
+mdl <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+
+mdl_se <- starprep(mdl, 
+                   stat = c("std.error"), 
+                   se_type = "HC2", 
+                   alpha = 0.05)
+
+stargazer(mdl,  
+          se = mdl_se, 
+          type = "latex", 
+          ci = FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant", 
+                   "mage",
+                   "meduc", 
+                   "mblack", 
+                   "alcohol", 
+                   "first",
+                   "diabete",
+                   "anemia"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("Maternal Smoking"),
+          dep.var.labels = c("Infant Birth Weight (g)"),
+          title = "Maternal Smoking During Pregnancy Decreases Infant Birth Weights", 
+          table.placement = "H"
+          )
+```
+
 
 # (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. For simplicity, consider the following covariates in your matching estimator: create a 0-1 indicator for mother's age (=1 if mage\>=34), and a 0-1 indicator for mother's education (1 if meduc\>=16), mother's race (mblack), and alcohol consumption indicator (alcohol). These 4 covariates will create 2*2*2\*2 = 16 cells. Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
 
