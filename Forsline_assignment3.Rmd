@@ -96,6 +96,7 @@ data <- data %>%
 # (a) What is the unadjusted mean difference in birth weight of infants with smoking and nonsmoking mothers?
 
 ```{r}
+#Calculate the unadjusted mean difference by hand 
 data_smoke <- subset(data, tobacco == 1)
 smoke_mean <- round(mean(data_smoke$birthwgt), digits = 2)
 
@@ -104,14 +105,16 @@ no_smoke_mean <- round(mean(data_no_smoke$birthwgt), digits = 2)
 
 diff <- no_smoke_mean - smoke_mean
 
-#this could also be a linear regression 
+#Calculate the unadjusted mean difference in a linear regression 
+
+lm_robust(birthwgt ~ tobacco, data = data)
 
 #what would need to be true for this unadjusted mean difference to be the true ATE? We have treatment ignorability unconditional on X 
 ```
 
-\noindent On average, smoking mothers give birth to babies that weight `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is `r diff`g.
+\noindent On average, smoking mothers give birth to babies that weight `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
 
-## (a) Under what hypothesis does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
+## (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
 
 ```{r}
 y1 <- round(mean(data_smoke$birthwgt), digits = 2)
