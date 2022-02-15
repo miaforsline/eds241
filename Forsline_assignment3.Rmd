@@ -107,45 +107,23 @@ diff <- no_smoke_mean - smoke_mean
 
 #Calculate the unadjusted mean difference in a linear regression 
 
-lm_robust(birthwgt ~ tobacco, data = data)
+mdl <- lm_robust(birthwgt ~ tobacco, data = data)
 
 #what would need to be true for this unadjusted mean difference to be the true ATE? We have treatment ignorability unconditional on X 
 ```
 
 \noindent On average, smoking mothers give birth to babies that weight `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
 
-## (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this hypothesis.
+## (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this assumption
 
 ```{r}
-y1 <- round(mean(data_smoke$birthwgt), digits = 2)
-y0 <- round(mean(data_no_smoke$birthwgt), digits = 2)
-
-ate <- y1 - y0
-
-#it is unrealistic that smoking status is randomly assigned 
-#show that when we condition on different demographic variables, the difference between smokers and non-smokers is not equal 
-
-#is D independent of Y(1) and Y(0)? 
-
-#income ~ smoking status
-#education ~ smoking status
-#age ~ smoking status 
-
-#we just want to show that smoking is not randomly assigned to mothers (as it would be in an ideal experiment)
-#if we find differences in income between smoking vs non-smoking mothers, is that difference statistically significant? 
-
-#if smoking was randomly assigned to mothers, then we would find no significant differences in income/education/age between smoking and non-smoking mothers 
-
-#hypothesis/assumption: smoking status is independent of Y(1) and Y(0) - we'd need smoking status to be randomly assigned to mothers unconditionally 
+mdl2 <- lm_robust(mage ~ tobacco, data = data)
+mage_diff <- round(mdl2$coefficients[[2]], digits = 2) * -1
 ```
 
-\noindent The average treatment effect (ATE) is the expected value of $Y(1)$ - $Y(0)$ within the population of interest. Thus, we would hypothesize that for mothers giving birth in Pennsylvania during 1989 - 1991, smoking during pregnancy influences infant birth weight. Specifically, we hypothesize that smoking during pregnancy results in lower infant birth weight.
+\noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers giving birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
 
-\noindent H~0~: Maternal smoking during pregnancy does not influence infant birth weight ($\mu$ = 0)
-
-\noindent H~A~: Maternal smoking during pregnancy does influence infant birth weight ($\mu$ $\neq$ 0)
-
-\noindent In this case, $Y(1)$ = `r y1` and $Y(0)$ = `r y0`, so the ATE = `r ate`.
+Therefore, it is more likely that there are significant differences in the control variables (such as mother's age or mother's education) depending on if mothers smoke or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy. 
 
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
 
