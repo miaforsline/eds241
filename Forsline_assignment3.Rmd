@@ -190,36 +190,50 @@ data_matching <- data %>%
 ```
 
 
-
-
-
-
 ```{r}
 #exact matching estimator
 
+#Y = birthwgt
+#X = g
+#D = tobacco
 
-# SIMPLE OLS ESTIMATOR NOT CONSISTENT FOR ATE
-ols <- lm(formula = Y ~ D, data=TIA_DATA)
-se_models = starprep(ols, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
-stargazer(ols, se = se_models, type="text")
-
-
-
-
-TIA_table <- TIA_DATA %>%
-  mutate(Y = ifelse(D==1, Y1,Y0))%>% #Create observed Y variable
-  group_by(X,D)%>% 
+TIA_table <- data_matching %>%
+  group_by(g, tobacco)%>% 
   summarise(n_obs = n(),
-            Y_mean= mean(Y, na.rm = T))%>% #Calculate number of observations and Y mean by X by treatment cells
-  gather(variables, values, n_obs:Y_mean)%>% #Reshape data
-  mutate(variables = paste0(variables,"_",D, sep=""))%>% #Combine the treatment and variables for reshaping
-  pivot_wider(id_cols = X, names_from = variables,values_from = values)%>% #Reshape data by treatment and X cell
-  ungroup()%>%  #Ungroup from X values
+            Y_mean = mean(birthwgt, na.rm = T)) %>% 
+  #Calculate number of observations and Y mean by X by treatment cells
+  gather(variables, values, n_obs:Y_mean) %>% #Reshape data
+  mutate(variables = paste0(variables,"_",tobacco, sep="")) %>% #Combine the treatment and variables for reshaping
+  pivot_wider(id_cols = g, names_from = variables, values_from = values) %>% #Reshape data by treatment and X cell
+  ungroup() %>%  #Ungroup from X values
   mutate(Y_diff = Y_mean_1 - Y_mean_0, #calculate Y_diff
          w_ATE = (n_obs_0+n_obs_1)/(sum(n_obs_0)+sum(n_obs_1)),
          w_ATT = n_obs_1/sum(n_obs_1))%>% #calculate weights
   mutate_if(is.numeric, round, 2) #Round data
+
+stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
 ```
+
+```{r}
+# MULTIVARIATE MATCHING ESTIMATES OF ATE AND ATT
+ATE=sum((TIA_table$w_ATE)*(TIA_table$Y_diff))
+ATE
+
+ATT=sum((TIA_table$w_ATT)*(TIA_table$Y_diff))
+ATT
+```
+
+
+```{r}
+# SIMPLE OLS ESTIMATOR NOT CONSISTENT FOR ATE
+ols <- lm(formula = birthwgt ~ tobacco, data=data_matching)
+
+se_models = starprep(ols, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+stargazer(ols, se = se_models, type="text")
+```
+
+
+
 
 
 ```{r}
