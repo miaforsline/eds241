@@ -38,12 +38,16 @@ FULTON <- read.csv(here("data", "FULTON.csv")) %>%
 ```{r}
 # SUMMARY STATISTICS
 stargazer(FULTON, type="text", digits=2)
+#tots lb of fish 
+#windspd = log 
+
 ```
 
 
 ```{r}
 # BASIC OLS REGRESSION
-ols <- lm(formula = log_tots ~ log_price, data=FULTON)
+ols <- lm(formula = log_tots ~ log_price, data=FULTON) 
+#-0.5638 = elasticity of demand 
 summary(ols)
 ```
 
@@ -51,11 +55,20 @@ summary(ols)
 ```{r}
 # FIRST_STAGE REGRESSION - JUST-IDENTIFIED MODEL
 # Lecture 8, slide 12
-fs1 <- lm(formula = log_price ~ windspd, data=FULTON)
+fs1 <- lm(formula = log_price ~ windspd, data=FULTON) #no regressors
+#we want to make sure that our output is reasonable
+#if windspeed increases, the price of fish also increases 
 summary(fs1)
 
+#F > 10 BUT it is testing all parameters including the constant
+```
+
+
+```{r}
 # F-test for non-weak and relevant instruments (Lecture 9, slides 13-14)
 linearHypothesis(fs1, c("windspd=0"), white.adjust = "hc2")
+#F > 10, which is above our threshold 
+# p-value doesn't matter for us 
 ```
 
 
@@ -64,6 +77,11 @@ linearHypothesis(fs1, c("windspd=0"), white.adjust = "hc2")
 # Lecture 8, slide 13
 tsls1 <- ivreg(log_tots ~ log_price | windspd, data = FULTON) #windspd = instrument 
 summary(tsls1)
+#takes cares of 1st and 2nd stage regression 
+#our elasticity of demand = B1 = -1.3744 
+#we estimate the demand elasticity (slope of the demand curve) using only the variation of log price that comes from wind speed 
+# 1 demand curve with multiple supply curves moving around (windspeed only affects supply, not demand)
+#accounting for endogeneity bias can significantly impact our estimate of B1 
 ```
 
 
@@ -79,27 +97,52 @@ se_models <- append(se_ols_fs1,list(se_tsls1))
 stargazer(ols, fs1, tsls1, se = se_models, type="text")
 ```
 
-
+# Next we will add dummy variables for day of the week + a second IV (cold) 
 ```{r}
 # FIRST_STAGE REGRESSION - OVER-IDENTIFIED MODEL
 # Lecture 9, slide 6
 fs2 <- lm(formula = log_price ~ day1 + day2 + day3 + day4 + windspd + cold, data=FULTON)
 summary(fs2)
+#cold is likely not affecting fish price - thus it will likely be a weak instrument 
+#this F-statistic < 10, BUT it is testing all these parameters 
+```
 
+
+```{r}
 # F-test for non-weak and relevant instruments (Lecture 9, slides 13-14)
 linearHypothesis(fs2, c("windspd=0", "cold=0"), white.adjust = "hc2")
+# the true test of weak instruments is only looking at windspeed and cold 
+# this true F-statistic < 10, so we identify these as weak instruments 
+#again, we ignore the p-value 
+```
+
+```{r}
+fs3 <- lm(formula = log_price ~ day1 + day2 + day3 + day4 + windspd, data=FULTON)
+#summary(fs2)
+linearHypothesis(fs3, c("windspd=0"), white.adjust = "hc2")
+#but when we test windspeed alone, we can see F-statistic > 10, so we will keep windspeed in the final model 
+```
 
 
+```{r}
 # TSLS - OVER-IDENTIFIED MODEL
 # Lecture 9, Slide 7
 tsls2 <- ivreg(log_tots ~ log_price + day1 + day2 + day3 + day4 | day1 + day2 + day3 + day4 + windspd + cold, data = FULTON)
 summary(tsls2)
+#we put the dummy day variables on the right of the bar (instruments Z) as well as on the left of the bar as variables (Xs) 
+#we cannot assume the Xs are exogenous, so we must include them as Zs 
+```
 
+# We can remove weak instruments 
+```{r}
 # FINAL TSLS - REMOVED WEAKED INSTRUMENT
 tsls3 <- ivreg(log_tots ~ log_price + day1 + day2 + day3 + day4 | day1 + day2 + day3 + day4 + windspd, data = FULTON)
 summary(tsls3)
+# we remove cold weather weak instrument 
+```
 
 
+```{r}
 # Calculate robust standard errors for FS2 using starprep()
 se_fs2 <- starprep(fs2, stat = c("std.error"), se_type = "HC2", alpha = 0.05) 
 

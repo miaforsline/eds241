@@ -56,8 +56,6 @@ mean(e0)
 e1 <- e[,c(2)]  
 mean(e1)
 
-
-
 # GENERATE POTENTIAL OUTCOMES
 Y0 <- MU0 + e0
 mean(Y0)
@@ -71,7 +69,6 @@ print(ATE) #verify that the average treatment effect = 1.5 (which we artificiall
 v <- rnorm(bigN, 0, 2) #error term 
 D <- as.numeric((-2*X1+ -1*X2 + 0.5*X3 + 1*X4 + 2*X5 + v)>0) #binary treatment D - if it is > 0, you are assigned to treatment group ; if it is < 0, you are assigned to the control group 
 mean(D)
-
 
 # USE SUTVA TO MAP POTENTIAL OUTCOMES INTO OBSERVED OUTCOMES
 Y = D*Y1 + (1-D)*Y0 #maintaining SUTVA assumptions  to observe Y(0) and Y(1) depending on if D = 0 or D = 1 

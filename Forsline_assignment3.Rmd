@@ -102,6 +102,10 @@ data_no_smoke <- subset(data, tobacco == 0)
 no_smoke_mean <- round(mean(data_no_smoke$birthwgt), digits = 2)
 
 diff <- no_smoke_mean - smoke_mean
+
+#this could also be a linear regression 
+
+#what would need to be true for this unadjusted mean difference to be the true ATE? We have treatment ignorability unconditional on X 
 ```
 
 \noindent On average, smoking mothers give birth to babies that weight `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is `r diff`g.
@@ -113,6 +117,22 @@ y1 <- round(mean(data_smoke$birthwgt), digits = 2)
 y0 <- round(mean(data_no_smoke$birthwgt), digits = 2)
 
 ate <- y1 - y0
+
+#it is unrealistic that smoking status is randomly assigned 
+#show that when we condition on different demographic variables, the difference between smokers and non-smokers is not equal 
+
+#is D independent of Y(1) and Y(0)? 
+
+#income ~ smoking status
+#education ~ smoking status
+#age ~ smoking status 
+
+#we just want to show that smoking is not randomly assigned to mothers (as it would be in an ideal experiment)
+#if we find differences in income between smoking vs non-smoking mothers, is that difference statistically significant? 
+
+#if smoking was randomly assigned to mothers, then we would find no significant differences in income/education/age between smoking and non-smoking mothers 
+
+#hypothesis/assumption: smoking status is independent of Y(1) and Y(0) - we'd need smoking status to be randomly assigned to mothers unconditionally 
 ```
 
 \noindent The average treatment effect (ATE) is the expected value of $Y(1)$ - $Y(0)$ within the population of interest. Thus, we would hypothesize that for mothers giving birth in Pennsylvania during 1989 - 1991, smoking during pregnancy influences infant birth weight. Specifically, we hypothesize that smoking during pregnancy results in lower infant birth weight.
@@ -124,6 +144,11 @@ ate <- y1 - y0
 \noindent In this case, $Y(1)$ = `r y1` and $Y(0)$ = `r y0`, so the ATE = `r ate`.
 
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
+
+```{r}
+lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+```
+
 
 \noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g). 
 
@@ -180,7 +205,29 @@ data_matching <- data %>%
       meduc < 16 ~ 0)
     )
 
+#exact matching estimator 
 
+
+#linear regression analogue 
+mdl3 <- lm_robust(birthwgt ~ tobacco + 
+                   mage + meduc + mblack + alcohol + 
+                   mage:meduc + 
+                   mage:mblack + 
+                   mage:alcohol + 
+                   meduc:mblack + 
+                   meduc:alcohol + 
+                   mblack:alcohol + 
+                   mage:meduc:mblack +
+                   mage:meduc:alcohol + 
+                   meduc:mblack:alcohol + 
+                   tobacco:mage:meduc:mblack:alcohol, data = data)
+mdl3
+
+#interactions for mage, meduc, mblack, alcohol 
+#google fully saturated model 
+
+
+lm_robust(birthwgt ~ tobacco) 
 ```
 
 
