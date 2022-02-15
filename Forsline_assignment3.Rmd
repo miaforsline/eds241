@@ -128,21 +128,20 @@ Therefore, it is more likely that there are significant differences in the contr
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
 
 ```{r}
-lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+mdl3 <- lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
 ```
-
 
 \noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g). 
 
 ```{r , results = 'asis', echo = FALSE}
-mdl <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+mdl4 <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
 
-mdl_se <- starprep(mdl, 
+mdl_se <- starprep(mdl4, 
                    stat = c("std.error"), 
                    se_type = "HC2", 
                    alpha = 0.05)
 
-stargazer(mdl,  
+stargazer(mdl4,  
           se = mdl_se, 
           type = "latex", 
           ci = FALSE, 
@@ -178,18 +177,52 @@ These 4 covariates will create 2x2x2x2 = 16 cells.
 Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
 
 ```{r}
+#Create the covariate indicators 
 data_matching <- data %>% 
   mutate(mage_ind = case_when(
     mage >= 34 ~ 1,
     mage < 34 ~ 0),
-    meduc_inc = case_when(
+    meduc_ind = case_when(
       meduc >= 16 ~ 1,
-      meduc < 16 ~ 0)
+      meduc < 16 ~ 0),
+    g = paste0(mage_ind, meduc_ind, mblack, alcohol) #create all combinations of the 4 covariates 
     )
+```
 
-#exact matching estimator 
 
 
+
+
+
+```{r}
+#exact matching estimator
+
+
+# SIMPLE OLS ESTIMATOR NOT CONSISTENT FOR ATE
+ols <- lm(formula = Y ~ D, data=TIA_DATA)
+se_models = starprep(ols, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+stargazer(ols, se = se_models, type="text")
+
+
+
+
+TIA_table <- TIA_DATA %>%
+  mutate(Y = ifelse(D==1, Y1,Y0))%>% #Create observed Y variable
+  group_by(X,D)%>% 
+  summarise(n_obs = n(),
+            Y_mean= mean(Y, na.rm = T))%>% #Calculate number of observations and Y mean by X by treatment cells
+  gather(variables, values, n_obs:Y_mean)%>% #Reshape data
+  mutate(variables = paste0(variables,"_",D, sep=""))%>% #Combine the treatment and variables for reshaping
+  pivot_wider(id_cols = X, names_from = variables,values_from = values)%>% #Reshape data by treatment and X cell
+  ungroup()%>%  #Ungroup from X values
+  mutate(Y_diff = Y_mean_1 - Y_mean_0, #calculate Y_diff
+         w_ATE = (n_obs_0+n_obs_1)/(sum(n_obs_0)+sum(n_obs_1)),
+         w_ATT = n_obs_1/sum(n_obs_1))%>% #calculate weights
+  mutate_if(is.numeric, round, 2) #Round data
+```
+
+
+```{r}
 #linear regression analogue 
 mdl3 <- lm_robust(birthwgt ~ tobacco + 
                    mage + meduc + mblack + alcohol + 
@@ -209,7 +242,7 @@ mdl3
 #google fully saturated model 
 
 
-lm_robust(birthwgt ~ tobacco) 
+lm_robust(birthwgt ~ tobacco, data = data) 
 ```
 
 
