@@ -256,29 +256,34 @@ stargazer(mdl4, se = se_models, type="text")
 
 #what is the probability that D = 1 ? 
 
-ps_model <- glm(DAPever ~ LME + genus, family = binomial(), data = CGL)
+data_p <- data_matching %>% 
+  mutate(tobacco = as.integer(tobacco),
+         mage_ind = as.integer(mage_ind), 
+         meduc_ind = as.integer(meduc_ind), 
+         mage_sq = as.integer(mage ** 2))
+
+ps_model <- glm(tobacco ~ mage_ind + mage_sq + meduc_ind + mblack + alcohol, 
+                family = binomial(), 
+                data = data_p)
 summary(ps_model)
 
-EPS <- predict(ps_model, type = "response") #use estimated logistic equation to create EPS (estimated propensity score)
+eps <- predict(ps_model, type = "response") 
+#use estimated logistic equation to create EPS (estimated propensity score)
 
-PS_WGT <- (CGL$DAPever/EPS) + ((1-CGL$DAPever)/(1-EPS)) #PS_WGT = p-score weight
+ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) 
+#PS_WGT = p-score weight
 ```
 
 
 # (e) Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
 
 ```{r}
-# COLLECT ALL RELEVANT VARIABLES IN DATAFRAME
-DF <- data.frame(years = CGL$years, collapse = CGL$collapse, DAPever = CGL$DAPever, 
-                 LME = CGL$LME, genus = CGL$genus, species = CGL$species, EPS, PS_WGT)
-
-
 # BOXPLOTS TO EXAMINE OVERLAP IN P-SCORE DISTRIBUTIONS
 
 #not perfectly aligned, but reasonably aligned, especially around the median 
 
-ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
-  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
+# ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
+#   geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
 
 
 # WLS USING EPS WEIGHTS
