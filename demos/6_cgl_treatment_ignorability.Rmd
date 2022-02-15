@@ -91,7 +91,9 @@ stargazer(mA, mB, mC, se = se_models, type="text", omit = "(LME)|(genus)|(specie
 
 ps_model <- glm(DAPever ~ LME + genus, family = binomial(), data = CGL)
 summary(ps_model)
+
 EPS <- predict(ps_model, type = "response") #use estimated logistic equation to create EPS (estimated propensity score)
+
 PS_WGT <- (CGL$DAPever/EPS) + ((1-CGL$DAPever)/(1-EPS)) #PS_WGT = p-score weight 
 ```
 

@@ -89,7 +89,8 @@ data <- data %>%
          alcohol = as.factor(alcohol), 
          first = as.factor(first), 
          diabete = as.factor(diabete), 
-         anemia = as.factor(anemia))
+         anemia = as.factor(anemia)
+         )
 ```
 
 # (a) What is the unadjusted mean difference in birth weight of infants with smoking and nonsmoking mothers?
@@ -233,4 +234,44 @@ lm_robust(birthwgt ~ tobacco)
 
 # (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother's age, mother's age squared, mother's education, and indicators for mother's race, and alcohol consumption.
 
+```{r}
+# BASIC PROPENSITY SCORE --- THIS IS A TOY MODEL
+# ESTIMATE PROPENSITY SCORE MODEL AND PREDICT (EPS)
+
+#what is the probability that D = 1 ? 
+
+ps_model <- glm(DAPever ~ LME + genus, family = binomial(), data = CGL)
+summary(ps_model)
+
+EPS <- predict(ps_model, type = "response") #use estimated logistic equation to create EPS (estimated propensity score)
+
+PS_WGT <- (CGL$DAPever/EPS) + ((1-CGL$DAPever)/(1-EPS)) #PS_WGT = p-score weight
+```
+
+
 # (e) Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
+
+```{r}
+# COLLECT ALL RELEVANT VARIABLES IN DATAFRAME
+DF <- data.frame(years = CGL$years, collapse = CGL$collapse, DAPever = CGL$DAPever, 
+                 LME = CGL$LME, genus = CGL$genus, species = CGL$species, EPS, PS_WGT)
+
+
+# BOXPLOTS TO EXAMINE OVERLAP IN P-SCORE DISTRIBUTIONS
+
+#not perfectly aligned, but reasonably aligned, especially around the median 
+
+ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
+  geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
+
+
+# WLS USING EPS WEIGHTS
+wls1 <- lm(formula = collapse ~ DAPever, data=DF, weights=PS_WGT)
+wls2 <- lm(formula = collapse ~ DAPever + LME + genus, data=DF, weights=PS_WGT) #adding linear controls doesn't change the coefficients much 
+se_models = starprep(wls1, wls2, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+stargazer(wls1, wls2, se = se_models, type="text", omit = "(LME)|(genus)|(species)")
+
+# if you don't adjust (-14.2%)
+# if you do adjust, we get a very similar -14.8%, so either there was no bias or the controls removed very little bias 
+```
+
