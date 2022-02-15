@@ -189,10 +189,8 @@ data_matching <- data %>%
     )
 ```
 
-
+Exact matching estimator 
 ```{r}
-#exact matching estimator
-
 #Y = birthwgt
 #X = g
 #D = tobacco
@@ -224,41 +222,31 @@ ATT
 ```
 
 
-```{r}
-# SIMPLE OLS ESTIMATOR NOT CONSISTENT FOR ATE
-ols <- lm(formula = birthwgt ~ tobacco, data=data_matching)
-
-se_models = starprep(ols, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
-stargazer(ols, se = se_models, type="text")
-```
-
-
-
-
 
 ```{r}
 #linear regression analogue 
 mdl3 <- lm_robust(birthwgt ~ tobacco + 
-                   mage + meduc + mblack + alcohol + 
-                   mage:meduc + 
-                   mage:mblack + 
-                   mage:alcohol + 
-                   meduc:mblack + 
-                   meduc:alcohol + 
+                   mage_ind + meduc_ind + mblack + alcohol + 
+                   mage_ind:meduc_ind + 
+                   mage_ind:mblack + 
+                   mage_ind:alcohol + 
+                   meduc_ind:mblack + 
+                   meduc_ind:alcohol + 
                    mblack:alcohol + 
-                   mage:meduc:mblack +
-                   mage:meduc:alcohol + 
-                   meduc:mblack:alcohol + 
-                   tobacco:mage:meduc:mblack:alcohol, data = data)
-mdl3
+                   mage_ind:meduc_ind:mblack +
+                   mage_ind:meduc_ind:alcohol + 
+                   meduc_ind:mblack:alcohol + 
+                   tobacco:mage_ind:meduc_ind:mblack:alcohol, data = data_matching)
 
 #interactions for mage, meduc, mblack, alcohol 
 #google fully saturated model 
 
+mdl4 <- lm(birthwgt ~ tobacco + as.factor(g), data = data_matching)
 
-lm_robust(birthwgt ~ tobacco, data = data) 
+se_models <- starprep(mdl4, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+
+stargazer(mdl4, se = se_models, type="text")
 ```
-
 
 # (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother's age, mother's age squared, mother's education, and indicators for mother's race, and alcohol consumption.
 
