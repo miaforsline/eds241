@@ -1,5 +1,5 @@
 ---
-title: "EDS 241 Assignment 2"
+title: "EDS 241 Assignment 3"
 author: "Mia Forsline"
 date: "2/20/2022"
 output: 
@@ -55,7 +55,7 @@ options(scipen=999) # not scientific notation
 
 ## Goal: to estimate the causal effect of maternal smoking during pregnancy on infant birth weight using the treatment ignorability assumptions
 
--   data come from the [Child & Family Data Archive's](https://www.childandfamilydataarchive.org/cfda/pages/cfda/index.html;jsessionid=0A67B5A8C563D765D595DD10EB38A777) [National Natality Detail Files](https://www.childandfamilydataarchive.org/cfda/cfda/series/36#:~:text=The%20public%2Duse%20Natality%20Detail,births%20occurring%20in%20each%20state.)
+-   data come from the [[Child & Family Data Archive's]{.ul}](https://www.childandfamilydataarchive.org/cfda/pages/cfda/index.html;jsessionid=0A67B5A8C563D765D595DD10EB38A777) [[National Natality Detail Files]{.ul}](https://www.childandfamilydataarchive.org/cfda/cfda/series/36#:~:text=The%20public%2Duse%20Natality%20Detail,births%20occurring%20in%20each%20state.)
 -   the data we will be using is a random sample of all births in Pennsylvania during 1989 - 1991
 -   each observation is a mother-infant pair
 
@@ -110,16 +110,16 @@ diff <- no_smoke_mean - smoke_mean
 mdl <- lm_robust(birthwgt ~ tobacco, data = data)
 ```
 
-\noindent On average, smoking mothers give birth to babies that weigh `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
+\noindent On average, mothers who smoked during pregnancy gave birth to babies that weighed `r smoke_mean`g. On average, mothers who did not smoke during pregnancy gave birth to babies that weighed `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
 
-## (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this assumption
+# (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this assumption
 
 ```{r}
 mdl2 <- lm_robust(mage ~ tobacco, data = data)
 mage_diff <- round(mdl2$coefficients[[2]], digits = 2) * -1
 ```
 
-\noindent Table 1 shows empirical evidence against the assumption that maternal smoking is randomly assigned among mothers who gave birth in Pennsylvania from 1989 - 1991. 
+\noindent Table 1 shows empirical evidence against the assumption that maternal smoking is randomly assigned among mothers who gave birth in Pennsylvania from 1989 - 1991.
 
 ```{r , results = 'asis', echo = FALSE}
 mdl3 <- lm(mage ~ tobacco, data = data)
@@ -144,10 +144,9 @@ stargazer(mdl3,
           )
 ```
 
+\noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers who gave birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment and maternal smoking is not a treatment that can be randomly assigned. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
 
-\noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers giving birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment and maternal smoking is not a treatment that can be randomly assigned. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
-
-Therefore, it is more likely that there are significant differences in the control variables (such as mother's age or mother's education) depending on if mothers smoke or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy. 
+\noindent Therefore, it is more likely that there are significant differences in the control variables (such as mother's age) depending on if mothers smoked during pregnancy or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy.
 
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
 
@@ -155,7 +154,7 @@ Therefore, it is more likely that there are significant differences in the contr
 mdl4 <- lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
 ```
 
-\noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g). 
+\noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g).
 
 ```{r , results = 'asis', echo = FALSE}
 mdl5 <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
@@ -187,16 +186,19 @@ stargazer(mdl5,
           )
 ```
 
+# (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight.
 
-# (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight. 
+For simplicity, consider the following covariates in your matching estimator:
 
-For simplicity, consider the following covariates in your matching estimator: 
-- create a 0-1 indicator for mother's age (=1 if mage\>=34)
-- and a 0-1 indicator for mother's education (1 if meduc\>=16) 
-- mother's race (mblack)
-- and alcohol consumption indicator (alcohol). 
+-   create a 0-1 indicator for mother's age (=1 if mage\>=34)
 
-These 4 covariates will create 2x2x2x2 = 16 cells. 
+-   and a 0-1 indicator for mother's education (1 if meduc\>=16)
+
+-   mother's race (mblack)
+
+-   and alcohol consumption indicator (alcohol).
+
+These 4 covariates will create 2x2x2x2 = 16 cells.
 
 Report the estimated average treatment effect of smoking on birthweight using the exact matching estimator and its linear regression analogue (Lecture 6, slides 12-14).
 
@@ -209,24 +211,26 @@ data_matching <- data %>%
     meduc_ind = case_when(
       meduc >= 16 ~ 1,
       meduc < 16 ~ 0),
-    g = paste0(mage_ind, meduc_ind, mblack, alcohol) #create all combinations of the 4 covariates 
+    g = paste0(mage_ind, meduc_ind, mblack, alcohol) #create all combinations of the 4 covariates in a new variable g in the dataframe 
     )
 ```
 
-Exact matching estimator 
-```{r}
-#Y = birthwgt
-#X = g
-#D = tobacco
+## Exact matching estimator
 
+-   Y = `birthwgt`
+
+-   X = `g`
+
+-   D = `tobacco`
+
+```{r}
 TIA_table <- data_matching %>%
   group_by(g, tobacco)%>% 
   summarise(n_obs = n(),
             Y_mean = mean(birthwgt, na.rm = T)) %>% 
-  #Calculate number of observations and Y mean by X by treatment cells
-  gather(variables, values, n_obs:Y_mean) %>% #Reshape data
-  mutate(variables = paste0(variables,"_",tobacco, sep="")) %>% #Combine the treatment and variables for reshaping
-  pivot_wider(id_cols = g, names_from = variables, values_from = values) %>% #Reshape data by treatment and X cell
+  gather(variables, values, n_obs:Y_mean) %>% 
+  mutate(variables = paste0(variables,"_",tobacco, sep="")) %>% 
+  pivot_wider(id_cols = g, names_from = variables, values_from = values) %>% 
   ungroup() %>%  #Ungroup from X values
   mutate(Y_diff = Y_mean_1 - Y_mean_0, #calculate Y_diff
          w_ATE = (n_obs_0+n_obs_1)/(sum(n_obs_0)+sum(n_obs_1)),
@@ -236,15 +240,17 @@ TIA_table <- data_matching %>%
 stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
 ```
 
+## Average treatment effect (ATE) estimation
+
 ```{r}
-# MULTIVARIATE MATCHING ESTIMATES OF ATE
 ATE <- sum((TIA_table$w_ATE)*(TIA_table$Y_diff))
 ```
 
-The exact matching estimator estimates an average treatment effect (ATE) of `r ATE`. 
+The exact matching estimator estimates an average treatment effect (ATE) of `r ATE`.
+
+## Linear regression analogue 
 
 ```{r}
-#linear regression analogue 
 mdl6 <- lm_robust(birthwgt ~ tobacco + 
                    mage_ind + meduc_ind + mblack + alcohol + 
                    mage_ind:meduc_ind + 
@@ -268,38 +274,30 @@ stargazer(mdl7, se = se_models, type="text")
 # (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother's age, mother's age squared, mother's education, and indicators for mother's race, and alcohol consumption.
 
 ```{r}
-# BASIC PROPENSITY SCORE --- THIS IS A TOY MODEL
-# ESTIMATE PROPENSITY SCORE MODEL AND PREDICT (EPS)
-
-#what is the probability that D = 1 ? 
-
+#Create dataframe that includes mother's age squared and necessary indicators 
 data_p <- data_matching %>% 
   mutate(tobacco = as.integer(tobacco),
          mage_ind = as.integer(mage_ind), 
          meduc_ind = as.integer(meduc_ind), 
          mage_sq = as.integer(mage ** 2))
 
+#create propensity score model 
 ps_model <- glm(tobacco ~ mage_ind + mage_sq + meduc_ind + mblack + alcohol, 
                 family = binomial(), 
                 data = data_p)
 summary(ps_model)
 
-eps <- predict(ps_model, type = "response") 
 #use estimated logistic equation to create EPS (estimated propensity score)
+eps <- predict(ps_model, type = "response") 
 
+#create propensity score weights 
 ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) #PS_WGT = p-score weight
 ```
-
 
 # (e) Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
 
 ```{r}
-# BOXPLOTS TO EXAMINE OVERLAP IN P-SCORE DISTRIBUTIONS
-#not perfectly aligned, but reasonably aligned, especially around the median 
-
-# ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
-#   geom_boxplot(fill="cyan") + xlab("ITQ Yes or No")
-
+#Exact answer changes when we apply the weights compared to the first question - what are those changes? interpret 
 
 # WLS USING EPS WEIGHTS
 wls1 <- lm(formula = birthwgt ~ tobacco, data=data_p, weights=ps_weight)
@@ -307,8 +305,4 @@ wls1 <- lm(formula = birthwgt ~ tobacco, data=data_p, weights=ps_weight)
 se_models = starprep(wls1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 
 stargazer(wls1, se = se_models, type="text", omit = "Constant")
-
-# if you don't adjust (-14.2%)
-# if you do adjust, we get a very similar -14.8%, so either there was no bias or the controls removed very little bias 
 ```
-
