@@ -5,7 +5,7 @@ date: "2/20/2022"
 output: 
   pdf_document:
     toc: false
-    number_sections: yes
+    number_sections: false
   html_document:
     theme: flatly
     code_folding: show
@@ -105,14 +105,12 @@ no_smoke_mean <- round(mean(data_no_smoke$birthwgt), digits = 2)
 
 diff <- no_smoke_mean - smoke_mean
 
-#Calculate the unadjusted mean difference in a linear regression 
+#Calculate the unadjusted mean difference using a linear regression 
 
 mdl <- lm_robust(birthwgt ~ tobacco, data = data)
-
-#what would need to be true for this unadjusted mean difference to be the true ATE? We have treatment ignorability unconditional on X 
 ```
 
-\noindent On average, smoking mothers give birth to babies that weight `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
+\noindent On average, smoking mothers give birth to babies that weigh `r smoke_mean`g. On average, non-smoking mothers give birth to babies that weight `r no_smoke_mean`g. Thus, the unadjusted mean difference in infant birth weights between smoking and nonsmoking mothers is approximately `r diff`g.
 
 ## (a) Under what assumption does this correspond to the average treatment effect of maternal smoking during pregnancy on infant birth weight? Provide some simple empirical evidence for or against this assumption
 
@@ -121,27 +119,53 @@ mdl2 <- lm_robust(mage ~ tobacco, data = data)
 mage_diff <- round(mdl2$coefficients[[2]], digits = 2) * -1
 ```
 
-\noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers giving birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
+\noindent Table 1 shows empirical evidence against the assumption that maternal smoking is randomly assigned among mothers who gave birth in Pennsylvania from 1989 - 1991. 
+
+```{r , results = 'asis', echo = FALSE}
+mdl3 <- lm(mage ~ tobacco, data = data)
+
+mdl_se <- starprep(mdl3, 
+                   stat = c("std.error"), 
+                   se_type = "HC2", 
+                   alpha = 0.05)
+
+stargazer(mdl3,  
+          se = mdl_se, 
+          type = "latex", 
+          ci = FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("Maternal Smoking"),
+          dep.var.labels = c("Mother's Age (Years)"),
+          title = "Maternal smoking predicts mothers' ages", 
+          table.placement = "H"
+          )
+```
+
+
+\noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers giving birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment and maternal smoking is not a treatment that can be randomly assigned. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
 
 Therefore, it is more likely that there are significant differences in the control variables (such as mother's age or mother's education) depending on if mothers smoke or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy. 
 
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
 
 ```{r}
-mdl3 <- lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+mdl4 <- lm_robust(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
 ```
 
 \noindent Table 1 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g). 
 
 ```{r , results = 'asis', echo = FALSE}
-mdl4 <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
+mdl5 <- lm(birthwgt ~ tobacco + mage + meduc + mblack + alcohol + first + diabete + anemia, data = data)
 
 mdl_se <- starprep(mdl4, 
                    stat = c("std.error"), 
                    se_type = "HC2", 
                    alpha = 0.05)
 
-stargazer(mdl4,  
+stargazer(mdl5,  
           se = mdl_se, 
           type = "latex", 
           ci = FALSE, 
@@ -213,19 +237,15 @@ stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
 ```
 
 ```{r}
-# MULTIVARIATE MATCHING ESTIMATES OF ATE AND ATT
-ATE=sum((TIA_table$w_ATE)*(TIA_table$Y_diff))
-ATE
-
-ATT=sum((TIA_table$w_ATT)*(TIA_table$Y_diff))
-ATT
+# MULTIVARIATE MATCHING ESTIMATES OF ATE
+ATE <- sum((TIA_table$w_ATE)*(TIA_table$Y_diff))
 ```
 
-
+The exact matching estimator estimates an average treatment effect (ATE) of `r ATE`. 
 
 ```{r}
 #linear regression analogue 
-mdl3 <- lm_robust(birthwgt ~ tobacco + 
+mdl6 <- lm_robust(birthwgt ~ tobacco + 
                    mage_ind + meduc_ind + mblack + alcohol + 
                    mage_ind:meduc_ind + 
                    mage_ind:mblack + 
@@ -238,14 +258,11 @@ mdl3 <- lm_robust(birthwgt ~ tobacco +
                    meduc_ind:mblack:alcohol + 
                    tobacco:mage_ind:meduc_ind:mblack:alcohol, data = data_matching)
 
-#interactions for mage, meduc, mblack, alcohol 
-#google fully saturated model 
+mdl7 <- lm(birthwgt ~ tobacco + as.factor(g), data = data_matching)
 
-mdl4 <- lm(birthwgt ~ tobacco + as.factor(g), data = data_matching)
+se_models <- starprep(mdl6, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 
-se_models <- starprep(mdl4, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
-
-stargazer(mdl4, se = se_models, type="text")
+stargazer(mdl7, se = se_models, type="text")
 ```
 
 # (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother's age, mother's age squared, mother's education, and indicators for mother's race, and alcohol consumption.
@@ -270,8 +287,7 @@ summary(ps_model)
 eps <- predict(ps_model, type = "response") 
 #use estimated logistic equation to create EPS (estimated propensity score)
 
-ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) 
-#PS_WGT = p-score weight
+ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) #PS_WGT = p-score weight
 ```
 
 
@@ -279,7 +295,6 @@ ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps))
 
 ```{r}
 # BOXPLOTS TO EXAMINE OVERLAP IN P-SCORE DISTRIBUTIONS
-
 #not perfectly aligned, but reasonably aligned, especially around the median 
 
 # ggplot(DF, aes(x=as.factor(DAPever), y=EPS)) + 
@@ -287,10 +302,11 @@ ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps))
 
 
 # WLS USING EPS WEIGHTS
-wls1 <- lm(formula = collapse ~ DAPever, data=DF, weights=PS_WGT)
-wls2 <- lm(formula = collapse ~ DAPever + LME + genus, data=DF, weights=PS_WGT) #adding linear controls doesn't change the coefficients much 
-se_models = starprep(wls1, wls2, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
-stargazer(wls1, wls2, se = se_models, type="text", omit = "(LME)|(genus)|(species)")
+wls1 <- lm(formula = birthwgt ~ tobacco, data=data_p, weights=ps_weight)
+
+se_models = starprep(wls1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+
+stargazer(wls1, se = se_models, type="text", omit = "Constant")
 
 # if you don't adjust (-14.2%)
 # if you do adjust, we get a very similar -14.8%, so either there was no bias or the controls removed very little bias 
