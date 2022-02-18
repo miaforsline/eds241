@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.13)  17 FEB 2022 17:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.13)  17 FEB 2022 19:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -326,6 +326,12 @@ File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
 
 LaTeX Warning: Label `' multiply defined.
 
+
+LaTeX Warning: Label `' multiply defined.
+
+
+LaTeX Warning: Label `' multiply defined.
+
 )
 \openout1 = `Forsline_assignment3.aux'.
 
@@ -445,24 +451,32 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 
 {/Users/miaforsline/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 251.
+(Font)              <10> on input line 252.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 251.
+(Font)              <7> on input line 252.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 251.
+(Font)              <5> on input line 252.
 [2] [3pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.332   a
-         nd a 0-1 indicator for mother's education (1 if meduc\textgreater=16)pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+l.340   c
+         reate a 0-1 indicator for mother's age (=1 if mage\textgreater=34)pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.332   a
-         nd a 0-1 indicator for mother's education (1 if meduc\textgreater=16)] [4] [5] [6]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 532.
+l.340   c
+         reate a 0-1 indicator for mother's age (=1 if mage\textgreater=34)] [4] [5pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.484 \begin{Shaded}
+                    ]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 486.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [7] [8] (./Forsline_assignment3.aux)
+) [6] [7pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  \__shipout_drop_firstpage_...
+l.575 \end{document}
+                    ] (./Forsline_assignment3.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -470,18 +484,18 @@ Package rerunfilecheck Info: File `Forsline_assignment3.out' has not changed.
 (rerunfilecheck)             Checksum: 65EC7FC384BD58EA01E8379A95DF0AAE;7787.
  ) 
 Here is how much of TeX's memory you used:
- 11260 strings out of 480246
- 178143 string characters out of 5894778
+ 11261 strings out of 480246
+ 178151 string characters out of 5894778
  472871 words of memory out of 5000000
  28974 multiletter control sequences out of 15000+600000
  520223 words of font info for 72 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  60i,10n,63p,1507b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Forsline_assignment3.pdf (8 pages, 231965 bytes).
+Output written on Forsline_assignment3.pdf (7 pages, 230516 bytes).
 PDF statistics:
- 202 PDF objects out of 1000 (max. 8388607)
- 163 compressed objects within 2 object streams
- 39 named destinations out of 1000 (max. 500000)
+ 200 PDF objects out of 1000 (max. 8388607)
+ 162 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
