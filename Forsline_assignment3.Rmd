@@ -148,6 +148,8 @@ stargazer(mdl3,
 
 \noindent Therefore, it is more likely that there are significant differences in the control variables (such as mother's age) depending on if mothers smoked during pregnancy or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy.
 
+\noindent This demonstrates that mother's age is correlated with whether mothers smoked or not during pregnancy, so this leads to omitted variables bias if we do not include this covariate. 
+
 # (b) Assume that maternal smoking is randomly assigned conditional on the observable covariates listed above. Estimate the effect of maternal smoking on birth weight using a linear regression. Report the estimated coefficient on tobacco and its standard error
 
 ```{r}
@@ -185,6 +187,8 @@ stargazer(mdl5,
           table.placement = "H"
           )
 ```
+
+The estimated coefficient of tobacco is X and the standard error is Y. 
 
 # (c) Use the exact matching estimator to estimate the effect of maternal smoking on birth weight.
 
@@ -243,7 +247,7 @@ stargazer(TIA_table, type= "text", summary = FALSE, digits = 2)
 ## Average treatment effect (ATE) estimation
 
 ```{r}
-ATE <- sum((TIA_table$w_ATE)*(TIA_table$Y_diff))
+ATE <- round(sum((TIA_table$w_ATE)*(TIA_table$Y_diff)), digits = 2)
 ```
 
 The exact matching estimator estimates an average treatment effect (ATE) of `r ATE`.
@@ -270,6 +274,8 @@ se_models <- starprep(mdl6, stat = c("std.error"), se_type = "HC2", alpha = 0.05
 
 stargazer(mdl7, se = se_models, type="text")
 ```
+
+The linear regression analogue estimates an average treatment effect of X. (tobacco coefficient)
 
 # (d) Estimate the propensity score for maternal smoking using a logit estimator and based on the following specification: mother's age, mother's age squared, mother's education, and indicators for mother's race, and alcohol consumption.
 
@@ -306,3 +312,5 @@ se_models = starprep(wls1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 
 stargazer(wls1, se = se_models, type="text", omit = "Constant")
 ```
+
+The effect of adding the weighted EPS is X. 

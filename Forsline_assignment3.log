@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.13)  17 FEB 2022 14:50
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.13)  17 FEB 2022 17:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -300,17 +300,28 @@ Package graphics Info: Driver file: pdftex.def on input line 107.
 )
 \Gin@req@height=\dimen164
 \Gin@req@width=\dimen165
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/generic/ulem/ulem.sty
+\UL@box=\box53
+\UL@hyphenbox=\box54
+\UL@skip=\skip54
+\UL@hook=\toks25
+\UL@height=\dimen166
+\UL@pe=\count287
+\UL@pixel=\dimen167
+\ULC@box=\box55
+Package: ulem 2019/11/18
+\ULdepth=\dimen168
 ) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count287
-\float@exts=\toks25
-\float@box=\box53
-\@float@everytoks=\toks26
-\@floatcapt=\box54
+\c@float@type=\count288
+\float@exts=\toks26
+\float@box=\box56
+\@float@everytoks=\toks27
+\@floatcapt=\box57
 ) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count288
-\l__pdf_internal_box=\box55
+\l__color_backend_stack_int=\count289
+\l__pdf_internal_box=\box58
 ) (./Forsline_assignment3.aux
 
 LaTeX Warning: Label `' multiply defined.
@@ -318,31 +329,31 @@ LaTeX Warning: Label `' multiply defined.
 )
 \openout1 = `Forsline_assignment3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 112.
-LaTeX Font Info:    ... okay on input line 112.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 115.
+LaTeX Font Info:    ... okay on input line 115.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 112.
+Package hyperref Info: Link coloring OFF on input line 115.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
@@ -350,11 +361,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count289
+\c@section@level=\count290
 )
-LaTeX Info: Redefining \ref on input line 112.
-LaTeX Info: Redefining \pageref on input line 112.
-LaTeX Info: Redefining \nameref on input line 112.
+LaTeX Info: Redefining \ref on input line 115.
+LaTeX Info: Redefining \pageref on input line 115.
+LaTeX Info: Redefining \nameref on input line 115.
 (./Forsline_assignment3.out) (./Forsline_assignment3.out)
 \@outlinefile=\write4
 \openout4 = `Forsline_assignment3.out'.
@@ -393,80 +404,84 @@ LaTeX Info: Redefining \nameref on input line 112.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 114.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 114.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 114.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 114.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 114.
+(Font)              <12> on input line 117.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 114.
+(Font)              <8> on input line 117.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 114.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 114.
+(Font)              <6> on input line 117.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 114.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 117.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 129.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 132.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 146.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 149.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
 {/Users/miaforsline/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 247.
+(Font)              <10> on input line 251.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 247.
+(Font)              <7> on input line 251.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 247.
+(Font)              <5> on input line 251.
 [2] [3pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.327 T
-       hese 4 covariates will create 2x2x2x2 = 16 cells.pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
+l.332   a
+         nd a 0-1 indicator for mother's education (1 if meduc\textgreater=16)pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.327 T
-       hese 4 covariates will create 2x2x2x2 = 16 cells.] [4] [5] [6] [7] [8] (./Forsline_assignment3.aux)
+l.332   a
+         nd a 0-1 indicator for mother's education (1 if meduc\textgreater=16)] [4] [5] [6]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 532.
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [7] [8] (./Forsline_assignment3.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Forsline_assignment3.out' has not changed.
-(rerunfilecheck)             Checksum: 8C3FAC07AB16D4306F4D0142843C0200;7134.
+(rerunfilecheck)             Checksum: 65EC7FC384BD58EA01E8379A95DF0AAE;7787.
  ) 
 Here is how much of TeX's memory you used:
- 11117 strings out of 480246
- 175948 string characters out of 5894778
- 470146 words of memory out of 5000000
- 28846 multiletter control sequences out of 15000+600000
- 519810 words of font info for 70 fonts, out of 8000000 for 9000
+ 11260 strings out of 480246
+ 178143 string characters out of 5894778
+ 472871 words of memory out of 5000000
+ 28974 multiletter control sequences out of 15000+600000
+ 520223 words of font info for 72 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,10n,63p,1507b,469s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Forsline_assignment3.pdf (8 pages, 231638 bytes).
+ 60i,10n,63p,1507b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
+Output written on Forsline_assignment3.pdf (8 pages, 231965 bytes).
 PDF statistics:
- 181 PDF objects out of 1000 (max. 8388607)
- 143 compressed objects within 2 object streams
- 33 named destinations out of 1000 (max. 500000)
- 89 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 202 PDF objects out of 1000 (max. 8388607)
+ 163 compressed objects within 2 object streams
+ 39 named destinations out of 1000 (max. 500000)
+ 113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
