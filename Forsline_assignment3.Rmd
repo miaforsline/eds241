@@ -146,7 +146,7 @@ stargazer(mdl3,
 
 \noindent This unadjusted mean value is valid if we assume that maternal smoking is randomly assigned among all mothers who gave birth in Pennsylvania during 1989 - 1991. However, that is an unrealistic assumption because this was not a randomized controlled treatment experiment and maternal smoking is not a treatment that can be randomly assigned. In other words, $D$ is not independent of the potential outcomes $Y(1)$ and $Y(0)$.
 
-\noindent Therefore, it is more likely that there are significant differences in the control variables (such as mother's age) depending on if mothers smoked during pregnancy or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy.
+\noindent Therefore, it is more likely that there are significant differences in the control variables (such as mother's age) depending on if mothers smoked during pregnancy or not. For example, on average, mothers who smoked during pregnancy are `r mage_diff` years younger than mothers who did not smoke during pregnancy (Table 1; p-value < 0.05)
 
 \noindent This demonstrates that mother's age is correlated with whether mothers smoked or not during pregnancy, so this leads to omitted variables bias if we do not include this covariate. 
 
@@ -311,33 +311,21 @@ summary(ps_model)
 eps <- predict(ps_model, type = "response") 
 
 #create propensity score weights 
-ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) #PS_WGT = p-score weight
+ps_weight <- (data_p$tobacco/eps) + ((1 - data_p$tobacco) / (1 - eps)) 
 ```
 
 # (e) Use the propensity score weighted regression (WLS) to estimate the effect of maternal smoking on birth weight (Lecture 7, slide 12).
 
-\noindent Table 4 shows the estimated coefficients and standard error of maternal smoking during pregnancy on infant birth weight (g) using a propensity score weighted regression (WLS). 
+```{r}
+wls1 <- lm_robust(formula = birthwgt ~ tobacco, data=data_p, weights=ps_weight)
 
-```{r , results = 'asis', echo = FALSE}
-wls1 <- lm(formula = birthwgt ~ tobacco, data=data_p, weights=ps_weight)
+wls2 <- lm_robust(formula = birthwgt ~ tobacco + mage_ind + mage_sq + meduc_ind + mblack + alcohol, data=data_p, weights=ps_weight)
 
-tobacco_coef_weighted <- round(wls1$coefficients[[2]], digits = 2)
-
-se_models <- starprep(wls1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
-
-stargazer(wls1,  
-          se = se_models, 
-          type = "latex", 
-          ci = FALSE, 
-          no.space = TRUE, 
-          header = FALSE, 
-          omit = c("Constant"),  
-          omit.stat = c("adj.rsq","ser", "f"),
-          covariate.labels = c("Maternal Smoking"),
-          dep.var.labels = c("Infant Birth Weight (g)"),
-          title = "Maternal Smoking During Pregnancy Decreases Infant Birth Weights", 
-          table.placement = "H"
-          )
+tobacco_coef_weighted1 <- round(wls1$coefficients[[2]], digits = 2)
+tobacco_coef_weighted2 <- round(wls2$coefficients[[2]], digits = 2)
 ```
 
-\noindent The propensity score weighted regression returns an estimate `tobacco` coefficient of `r tobacco_coef_weighted`. 
+```{r}
+huxtable::huxreg(wls1, wls2)
+```
+

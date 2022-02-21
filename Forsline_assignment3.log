@@ -1,11 +1,11 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.1.13)  17 FEB 2022 19:28
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.2.20)  20 FEB 2022 16:35
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **Forsline_assignment3.tex
 (./Forsline_assignment3.tex
 LaTeX2e <2021-11-15> patch level 1
-L3 programming layer <2022-01-12> (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
+L3 programming layer <2022-02-05> (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2021/10/04 v1.4n Standard LaTeX document class
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/base/size10.clo
 File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
@@ -318,14 +318,147 @@ Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \float@box=\box56
 \@float@everytoks=\toks27
 \@floatcapt=\box57
-) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
+\col@sep=\dimen169
+\ar@mcellbox=\box58
+\extrarowheight=\dimen170
+\NC@list=\toks28
+\extratabsurround=\skip55
+\backup@length=\skip56
+\ar@cellbox=\box59
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen171
+\captionmargin@=\dimen172
+\captionwidth=\dimen173
+\caption@tempdima=\dimen174
+\caption@indent=\dimen175
+\caption@parindent=\dimen176
+\caption@hangindent=\dimen177
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count289
+\c@continuedfloat=\count290
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/siunitx/siunitx.sty
+Package: siunitx 2022-02-15 v3.0.49 A comprehensive (SI) units package
+\l__siunitx_angle_tmp_dim=\dimen178
+\l__siunitx_angle_marker_box=\box60
+\l__siunitx_angle_unit_box=\box61
+\l__siunitx_compound_count_int=\count291
+\l__siunitx_number_exponent_fixed_int=\count292
+\l__siunitx_number_min_decimal_int=\count293
+\l__siunitx_number_min_integer_int=\count294
+\l__siunitx_number_round_precision_int=\count295
+\l__siunitx_number_group_minimum_int=\count296
+\l__siunitx_table_tmp_box=\box62
+\l__siunitx_table_tmp_dim=\dimen179
+\l__siunitx_table_column_width_dim=\dimen180
+\l__siunitx_table_integer_box=\box63
+\l__siunitx_table_decimal_box=\box64
+\l__siunitx_table_before_box=\box65
+\l__siunitx_table_after_box=\box66
+\l__siunitx_table_before_dim=\dimen181
+\l__siunitx_table_carry_dim=\dimen182
+\l__siunitx_unit_tmp_int=\count297
+\l__siunitx_unit_position_int=\count298
+\l__siunitx_unit_total_int=\count299
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-02-05 L3 programming layer (loader) 
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-02-07 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count289
-\l__pdf_internal_box=\box58
-) (./Forsline_assignment3.aux
-
-LaTeX Warning: Label `' multiply defined.
-
+\l__color_backend_stack_int=\count300
+\l__pdf_internal_box=\box67
+))
+Package: l3keys2e 2022-01-12 LaTeX2e option processing using LaTeX3 keys
+)) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+\everycr=\toks29
+\minrowclearance=\skip57
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip58
+\multirow@cntb=\count301
+\multirow@dima=\skip59
+\bigstrutjot=\dimen183
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/tools/hhline.sty
+Package: hhline 2020/01/04 v2.04 Table rule package (DPC)
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count302
+\calc@Bcount=\count303
+\calc@Adimen=\dimen184
+\calc@Bdimen=\dimen185
+\calc@Askip=\skip60
+\calc@Bskip=\skip61
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count304
+\calc@Cskip=\skip62
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/tools/tabularx.sty
+Package: tabularx 2020/01/15 v2.11c `tabularx' package (DPC)
+\TX@col@width=\dimen186
+\TX@old@table=\dimen187
+\TX@old@col=\dimen188
+\TX@target=\dimen189
+\TX@delta=\dimen190
+\TX@cols=\count305
+\TX@ftn=\toks30
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box68
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/wrapfig/wrapfig.sty
+\wrapoverhang=\dimen191
+\WF@size=\dimen192
+\c@WF@wrappedlines=\count306
+\WF@box=\box69
+\WF@everypar=\toks31
+Package: wrapfig 2003/01/31  v 3.6
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/adjustbox/adjustbox.sty
+Package: adjustbox 2020/08/19 v1.3 Adjusting TeX boxes (trim, clip, ...)
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2020/11/20 v2.8 package option processing (HA)
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks32
+\XKV@tempa@toks=\toks33
+)
+\XKV@depth=\count307
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+)) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/adjustbox/adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back-ends (calc, etex, pgfmath)
+) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/adjustbox/trimclip.sty
+Package: trimclip 2020/08/19 v1.2 Trim and clip general TeX material
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/collectbox/collectbox.sty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box70
+)
+\tc@llx=\dimen193
+\tc@lly=\dimen194
+\tc@urx=\dimen195
+\tc@ury=\dimen196
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/adjustbox/tc-pdftex.def
+File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen197
+\adjbox@Height=\dimen198
+\adjbox@Depth=\dimen199
+\adjbox@Totalheight=\dimen256
+\adjbox@pwidth=\dimen257
+\adjbox@pheight=\dimen258
+\adjbox@pdepth=\dimen259
+\adjbox@ptotalheight=\dimen260
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box71
+\sift@deathcycles=\count308
+\@vwid@loff=\dimen261
+\@vwid@roff=\dimen262
+)) (./Forsline_assignment3.aux
 
 LaTeX Warning: Label `' multiply defined.
 
@@ -335,31 +468,31 @@ LaTeX Warning: Label `' multiply defined.
 )
 \openout1 = `Forsline_assignment3.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 115.
-LaTeX Font Info:    ... okay on input line 115.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 129.
+LaTeX Font Info:    ... okay on input line 129.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-Package hyperref Info: Link coloring OFF on input line 115.
+Package hyperref Info: Link coloring OFF on input line 129.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
@@ -367,11 +500,11 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count290
+\c@section@level=\count309
 )
-LaTeX Info: Redefining \ref on input line 115.
-LaTeX Info: Redefining \pageref on input line 115.
-LaTeX Info: Redefining \nameref on input line 115.
+LaTeX Info: Redefining \ref on input line 129.
+LaTeX Info: Redefining \pageref on input line 129.
+LaTeX Info: Redefining \nameref on input line 129.
 (./Forsline_assignment3.out) (./Forsline_assignment3.out)
 \@outlinefile=\write4
 \openout4 = `Forsline_assignment3.out'.
@@ -410,92 +543,80 @@ LaTeX Info: Redefining \nameref on input line 115.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 117.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: threeparttable package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 117.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 117.
+LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 117.
+LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 117.
+(Font)              <12> on input line 131.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 117.
+(Font)              <8> on input line 131.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 117.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 117.
+(Font)              <6> on input line 131.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 117.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 131.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 132.
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 146.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 149.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 163.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
 {/Users/miaforsline/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 252.
+(Font)              <10> on input line 266.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 252.
+(Font)              <7> on input line 266.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 252.
-[2] [3pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.340   c
-         reate a 0-1 indicator for mother's age (=1 if mage\textgreater=34)pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.340   c
-         reate a 0-1 indicator for mother's age (=1 if mage\textgreater=34)] [4] [5pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.484 \begin{Shaded}
-                    ]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 486.
+(Font)              <5> on input line 266.
+[2] [3] [4] [5]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 500.
 (/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) [6] [7pdfTeX warning (ext4): destination with the same identifier (name{table.4}) has been already used, duplicate ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  \__shipout_drop_firstpage_...
-l.575 \end{document}
-                    ] (./Forsline_assignment3.aux)
+) [6] [7] (./Forsline_assignment3.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `Forsline_assignment3.out' has not changed.
-(rerunfilecheck)             Checksum: 65EC7FC384BD58EA01E8379A95DF0AAE;7787.
+(rerunfilecheck)             Checksum: DD7AA8F24D75C2FEC6D5262E393B56C6;7791.
  ) 
 Here is how much of TeX's memory you used:
- 11261 strings out of 480246
- 178151 string characters out of 5894778
- 472871 words of memory out of 5000000
- 28974 multiletter control sequences out of 15000+600000
+ 16522 strings out of 480238
+ 306904 string characters out of 5894598
+ 578966 words of memory out of 5000000
+ 34169 multiletter control sequences out of 15000+600000
  520223 words of font info for 72 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,10n,63p,1507b,485s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 70i,13n,79p,1507b,911s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Forsline_assignment3.pdf (7 pages, 230516 bytes).
+Output written on Forsline_assignment3.pdf (7 pages, 230631 bytes).
 PDF statistics:
- 200 PDF objects out of 1000 (max. 8388607)
- 162 compressed objects within 2 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 201 PDF objects out of 1000 (max. 8388607)
+ 163 compressed objects within 2 object streams
+ 41 named destinations out of 1000 (max. 500000)
  113 words of extra memory for PDF output out of 10000 (max. 10000000)
 
