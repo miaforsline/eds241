@@ -22,11 +22,11 @@ We plan to estimate the price elasticity of demand for fresh sardines acros 56 p
 ## Data description 
 Variables include: 
 - `country`
-- `port` 
+- `port`: where the fish is landed and sold 
 - `year`
 - `month`
-- `price_euro_kg`
-- `volume_sold_kg`
+- `price_euro_kg`: price per kg in Euros 
+- `volume_sold_kg`: quantity of sardines sold in kg 
 - `wind_m_s`
 
 # Set up 
@@ -39,9 +39,10 @@ packages=c("cowplot",
            "datasets", 
            "dplyr",
            "estimatr",
-           "here", 
            "ggplot2",
+           "here",
            "janitor",
+           "lubridate", 
            "stargazer", 
            "stringr",
            "tibble",
@@ -65,5 +66,21 @@ options(scipen=999) # not scientific notation
 # Read in the data 
 ```{r}
 data <- read_csv(here("data", "EU_sardines.csv"))
+
+data_clean <- data %>% 
+  clean_names() %>% 
+  mutate(year = as.factor(year),
+         month = as.factor(month), 
+         price_euro_kg = as.numeric(price_euro_kg), 
+         volume_sold_kg = as.numeric(volume_sold_kg),
+         wind_m_s = as.numeric(wind_m_s)
+  )
 ```
 
+# (a) Estimate a bivariate regression of log(volume_sold_kg) on log(price euro_kg). What is the price elasticity of demand for sardines? Test the null hypothesis that the price elasticity is equal to -1.
+
+# (b) Like in Lecture 8 (see the IV.R script), we will use wind_m_s as an instrument for log(price_euro_kg). To begin, estimate the first-stage regression relating log(price_euro_kg) to wind_m_s. Interpret the estimated coefficient on wind speed. Does it have the expected sign? Also test for the relevance of the instrument and whether it is a “weak” instrument by reporting the proper F-statistic. 
+
+# (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
+
+# (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
