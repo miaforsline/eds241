@@ -86,9 +86,10 @@ data_log <- data_clean %>%
          price_log = log(price_euro_kg))
 
 mdl <- lm_robust(price_log ~ volume_log, data = data_log)
+price_elasticity <- round(mdl$coefficients[[2]], digits = 2) 
 ```
 
-\noindent Text 
+\noindent The price elasticity of demand for sardines is approximately `r price_elasticity`. 
 
 \noindent Table 1 shows the results of a bivariate regression of log-transformed volume sold and log-transformed price per kg of freshs ardines across 56 ports in 4 European contries from 2013 - 2019. 
 
@@ -115,6 +116,8 @@ stargazer(mdl2,
 ```
 
 # (b) Like in Lecture 8 (see the IV.R script), we will use wind_m_s as an instrument for log(price_euro_kg). To begin, estimate the first-stage regression relating log(price_euro_kg) to wind_m_s. Interpret the estimated coefficient on wind speed. Does it have the expected sign? Also test for the relevance of the instrument and whether it is a “weak” instrument by reporting the proper F-statistic. 
+
+
 
 # (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
 
