@@ -130,6 +130,7 @@ wind_coef <- round(fs1$coefficients[[2]], digits = 2)
 
 \noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` in Euros. 
 
+Table 
 ```{r}
 
 ```
@@ -139,12 +140,21 @@ wind_coef <- round(fs1$coefficients[[2]], digits = 2)
 
 ## F-test for non-weak and relevant instruments 
 ```{r}
-linearHypothesis(fs1, c("wind_m_s=0"), white.adjust = "hc2")
+f <- linearHypothesis(fs1, c("wind_m_s=0"), white.adjust = "hc2")
+
+f_coef <- round(f$F[2], digits = 2)
+
 #F > 10, which is above our threshold 
 # p-value doesn't matter for us 
 ```
 
+Wind speed is not a weak instrument because the F-test value of `r f_coef` is above our threshold of 10. 
 
 # (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
+
+```{r}
+
+```
+
 
 # (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
