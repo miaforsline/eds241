@@ -89,11 +89,13 @@ data_log <- data_clean %>%
 
 mdl <- lm_robust(price_log ~ volume_log, data = data_log)
 price_elasticity <- round(mdl$coefficients[[2]], digits = 3) 
+
+#linearHypothesis(mdl, c("volume_log=-1"), white.adjust = "hc2")
 ```
 
-\noindent The price elasticity of demand for sardines is approximately `r price_elasticity`. 
+\noindent The price elasticity of demand, or the slope of the demand curve, for sardines is approximately `r price_elasticity`. 
 
-\noindent Table 1 shows the results of a bivariate regression of log-transformed volume sold and log-transformed price per kg of freshs ardines across 56 ports in 4 European contries from 2013 - 2019. 
+\noindent Table 1 shows the results of a bivariate regression of log-transformed volume sold and log-transformed price per kg of fresh sardines across 56 ports in 4 European contries from 2013 - 2019. 
 
 ```{r , results = 'asis', echo = FALSE}
 mdl2 <- lm(price_log ~ volume_log, data = data_log)
@@ -122,18 +124,33 @@ stargazer(mdl2,
 ## First-stage regression 
 ```{r}
 fs1 <- lm(formula = price_log ~ wind_m_s, data=data_log)
-summary(fs1)
-
-wind_coef <- round(fs1$coefficients[[2]], digits = 2)
-
-#F > 10 BUT it is testing all parameters including the constant
+#summary(fs1)
+wind_coef <- round(fs1$coefficients[[2]], digits = 3)
 ```
 
 \noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` in Euros. 
 
-Table 
-```{r}
+\noindent Table 2 shows the results of a first-stage regression of wind speed (m/s) and log-transformed price per kg of fresh sardines across 56 ports in 4 European contries from 2013 - 2019. 
 
+```{r , results = 'asis', echo = FALSE}
+mdl_se <- starprep(fs1, 
+                   stat = c("std.error"), 
+                   se_type = "HC2", 
+                   alpha = 0.05)
+
+stargazer(fs1,  
+          se = mdl_se, 
+          type = "latex", 
+          ci = FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("Wind Speec (m/s)"),
+          dep.var.labels = c("Log(Price)"),
+          title = "Wind speed significantly impacts sardine price in Europe", 
+          table.placement = "H"
+          )
 ```
 
 
@@ -172,6 +189,7 @@ se_ols_fs1 <- starprep(mdl2,fs1, stat = c("std.error"), se_type = "HC2", alpha =
 se_tsls1 <- coeftest(tsls1, vcov = vcovHC(tsls1, type = "HC2"))[, "Std. Error"]
 
 se_models <- append(se_ols_fs1,list(se_tsls1))
+
 stargazer(mdl2, fs1, tsls1, se = se_models, type="text")
 ```
 
