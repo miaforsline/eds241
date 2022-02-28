@@ -88,7 +88,7 @@ data_log <- data_clean %>%
          price_log = log(price_euro_kg))
 
 mdl <- lm_robust(price_log ~ volume_log, data = data_log)
-price_elasticity <- round(mdl$coefficients[[2]], digits = 2) 
+price_elasticity <- round(mdl$coefficients[[2]], digits = 3) 
 ```
 
 \noindent The price elasticity of demand for sardines is approximately `r price_elasticity`. 
@@ -162,6 +162,28 @@ summary(tsls1)
 #accounting for endogeneity bias can significantly impact our estimate of B1
 ```
 
+## Calculate robust standard errors
+- use `starprep()`to calculate OLS SEs
+- use `coeftest()` to calculate TSLS SEs 
+- present SEs using `stargazer()` 
+```{r}
+se_ols_fs1 <- starprep(mdl2,fs1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
+
+se_tsls1 <- coeftest(tsls1, vcov = vcovHC(tsls1, type = "HC2"))[, "Std. Error"]
+
+se_models <- append(se_ols_fs1,list(se_tsls1))
+stargazer(mdl2, fs1, tsls1, se = se_models, type="text")
+```
+
+
 \noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
 
 # (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
+
+```{r}
+tsls2 <- ivreg(volume_log ~ price_log + as.factor(country) + as.factor(year) + as.factor(month) | wind_m_s, data = data_log)
+price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
+
+summary(tsls2)
+```
+
