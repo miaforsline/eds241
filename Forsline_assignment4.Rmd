@@ -36,7 +36,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE, 
                       warning = FALSE)
 
-packages=c("cowplot",
+packages=c("car", 
+           "cowplot",
            "datasets", 
            "dplyr",
            "estimatr",
@@ -115,8 +116,33 @@ stargazer(mdl2,
           )
 ```
 
-# (b) Like in Lecture 8 (see the IV.R script), we will use wind_m_s as an instrument for log(price_euro_kg). To begin, estimate the first-stage regression relating log(price_euro_kg) to wind_m_s. Interpret the estimated coefficient on wind speed. Does it have the expected sign? Also test for the relevance of the instrument and whether it is a “weak” instrument by reporting the proper F-statistic. 
+# (b) Like in Lecture 8 (see the IV.R script), we will use wind_m_s as an instrument for log(price_euro_kg). To begin, estimate the first-stage regression relating log(price_euro_kg) to wind_m_s. Interpret the estimated coefficient on wind speed. Does it have the expected sign? 
 
+## First-stage regression 
+```{r}
+fs1 <- lm(formula = price_log ~ wind_m_s, data=data_log)
+summary(fs1)
+
+wind_coef <- round(fs1$coefficients[[2]], digits = 2)
+
+#F > 10 BUT it is testing all parameters including the constant
+```
+
+\noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` in Euros. 
+
+```{r}
+
+```
+
+
+# (b) Also test for the relevance of the instrument and whether it is a “weak” instrument by reporting the proper F-statistic. 
+
+## F-test for non-weak and relevant instruments 
+```{r}
+linearHypothesis(fs1, c("wind_m_s=0"), white.adjust = "hc2")
+#F > 10, which is above our threshold 
+# p-value doesn't matter for us 
+```
 
 
 # (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
