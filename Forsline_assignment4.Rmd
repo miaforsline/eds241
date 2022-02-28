@@ -171,7 +171,7 @@ Wind speed is not a weak instrument because the F-test value of `r f_coef` is ab
 tsls1 <- ivreg(volume_log ~ price_log | wind_m_s, data = data_log)
 price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
 
-summary(tsls1)
+#summary(tsls1)
 #takes cares of 1st and 2nd stage regression
 #our elasticity of demand = B1 = -1.3744
 #we estimate the demand elasticity (slope of the demand curve) using only the variation of log price that comes from wind speed
@@ -189,10 +189,23 @@ se_ols_fs1 <- starprep(mdl2,fs1, stat = c("std.error"), se_type = "HC2", alpha =
 se_tsls1 <- coeftest(tsls1, vcov = vcovHC(tsls1, type = "HC2"))[, "Std. Error"]
 
 se_models <- append(se_ols_fs1,list(se_tsls1))
-
-stargazer(mdl2, fs1, tsls1, se = se_models, type="text")
 ```
 
+```{r , results = 'asis', echo = FALSE}
+stargazer(mdl2, fs1, tsls1,  
+          se = se_models, 
+          type = "latex", 
+          ci = FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("X"),
+          dep.var.labels = c("Y"),
+          title = "Title", 
+          table.placement = "H"
+          )
+```
 
 \noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
 
