@@ -36,7 +36,8 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE, 
                       warning = FALSE)
 
-packages=c("car", 
+packages=c("AER", 
+           "car", 
            "cowplot",
            "datasets", 
            "dplyr",
@@ -141,20 +142,26 @@ Table
 ## F-test for non-weak and relevant instruments 
 ```{r}
 f <- linearHypothesis(fs1, c("wind_m_s=0"), white.adjust = "hc2")
-
 f_coef <- round(f$F[2], digits = 2)
-
-#F > 10, which is above our threshold 
-# p-value doesn't matter for us 
 ```
 
 Wind speed is not a weak instrument because the F-test value of `r f_coef` is above our threshold of 10. 
 
 # (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
 
+## Two-stage least square regresion
 ```{r}
+tsls1 <- ivreg(volume_log ~ price_log | wind_m_s, data = data_log)
+price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
 
+summary(tsls1)
+#takes cares of 1st and 2nd stage regression
+#our elasticity of demand = B1 = -1.3744
+#we estimate the demand elasticity (slope of the demand curve) using only the variation of log price that comes from wind speed
+# 1 demand curve with multiple supply curves moving around (windspeed only affects supply, not demand)
+#accounting for endogeneity bias can significantly impact our estimate of B1
 ```
 
+\noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
 
 # (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
