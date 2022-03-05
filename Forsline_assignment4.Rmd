@@ -17,7 +17,7 @@ header-includes:
   - \usepackage{float}
 ---
 # Introduction 
-We plan to estimate the price elasticity of demand for fresh sardines acros 56 points in 4 European countries. We will use monthly data from 2013 - 2019. 
+We plan to estimate the price elasticity of demand for fresh sardines across 56 points in 4 European countries. We will be using monthly data from 2013 - 2019. 
 
 ## Data description 
 Variables include: 
@@ -66,7 +66,7 @@ for (i in packages) {
 options(scipen=999) # not scientific notation
 ```
 
-## Read in the data 
+## Read in and clean the data 
 ```{r}
 data <- read_csv(here("data", "EU_sardines.csv"))
 
@@ -128,7 +128,7 @@ fs1 <- lm(formula = price_log ~ wind_m_s, data=data_log)
 wind_coef <- round(fs1$coefficients[[2]], digits = 3)
 ```
 
-\noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` in Euros. 
+\noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` Euros. 
 
 \noindent Table 2 shows the results of a first-stage regression of wind speed (m/s) and log-transformed price per kg of fresh sardines across 56 ports in 4 European contries from 2013 - 2019. 
 
@@ -146,7 +146,7 @@ stargazer(fs1,
           header = FALSE, 
           omit = c("Constant"),  
           omit.stat = c("adj.rsq","ser", "f"),
-          covariate.labels = c("Wind Speec (m/s)"),
+          covariate.labels = c("Wind Speed (m/s)"),
           dep.var.labels = c("Log(Price)"),
           title = "Wind speed significantly impacts sardine price in Europe", 
           table.placement = "H"
@@ -162,7 +162,7 @@ f <- linearHypothesis(fs1, c("wind_m_s=0"), white.adjust = "hc2")
 f_coef <- round(f$F[2], digits = 2)
 ```
 
-Wind speed is not a weak instrument because the F-test value of `r f_coef` is above our threshold of 10. 
+\noindent Wind speed is not a weak instrument because the F-test value of `r f_coef` is well above our threshold of 10. 
 
 # (c) Estimate the TSLS estimator of the price elasticity of demand for sardines using wind_m_s as an instrument for log(price_euro_kg). What is the estimated price elasticity of demand for sardines? 
 
@@ -170,19 +170,15 @@ Wind speed is not a weak instrument because the F-test value of `r f_coef` is ab
 ```{r}
 tsls1 <- ivreg(volume_log ~ price_log | wind_m_s, data = data_log)
 price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
-
 #summary(tsls1)
-#takes cares of 1st and 2nd stage regression
-#our elasticity of demand = B1 = -1.3744
-#we estimate the demand elasticity (slope of the demand curve) using only the variation of log price that comes from wind speed
-# 1 demand curve with multiple supply curves moving around (windspeed only affects supply, not demand)
-#accounting for endogeneity bias can significantly impact our estimate of B1
 ```
 
+\noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
+
 ## Calculate robust standard errors
-- use `starprep()`to calculate OLS SEs
-- use `coeftest()` to calculate TSLS SEs 
-- present SEs using `stargazer()` 
+- use `starprep()`to calculate OLS standard errors
+- use `coeftest()` to calculate TSLS standard erros 
+- display standard errors using `stargazer()` 
 ```{r}
 se_ols_fs1 <- starprep(mdl2,fs1, stat = c("std.error"), se_type = "HC2", alpha = 0.05)
 
@@ -190,6 +186,9 @@ se_tsls1 <- coeftest(tsls1, vcov = vcovHC(tsls1, type = "HC2"))[, "Std. Error"]
 
 se_models <- append(se_ols_fs1,list(se_tsls1))
 ```
+
+
+\noindent Table 3 shows the two-stage least square regression of the price elasticity of demand for sardines using wind speed (m/s) as an instrument for the log of sardine price per kg. 
 
 ```{r , results = 'asis', echo = FALSE}
 stargazer(mdl2, fs1, tsls1,  
@@ -200,14 +199,12 @@ stargazer(mdl2, fs1, tsls1,
           header = FALSE, 
           omit = c("Constant"),  
           omit.stat = c("adj.rsq","ser", "f"),
-          covariate.labels = c("X"),
-          dep.var.labels = c("Y"),
+          #covariate.labels = c("Log(Volume)", "Wind Speed (m/s)", "Log(Price)"),
+          #dep.var.labels = c("Log(Price)", "Log(Volume)"),
           title = "Title", 
           table.placement = "H"
           )
 ```
-
-\noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
 
 # (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
 
