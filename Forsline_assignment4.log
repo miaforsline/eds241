@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.2.20)  7 MAR 2022 21:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.23 (TeX Live 2022/dev) (preloaded format=pdflatex 2022.2.20)  8 MAR 2022 14:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -436,35 +436,39 @@ File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 ) [1
 
 {/Users/miaforsline/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 183.
+(/Users/miaforsline/Library/TinyTeX/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 196.
+(Font)              <10> on input line 198.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 196.
+(Font)              <7> on input line 198.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 196.
+(Font)              <5> on input line 198.
 [2pdfTeX warning (ext4): destination with the same identifier (name{table.1}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.261 
+l.240 
       ]
-Underfull \hbox (badness 1762) in paragraph at lines 286--286
+Underfull \hbox (badness 1762) in paragraph at lines 290--290
 [][]\T1/lmr/bx/n/14.4 (c) Es-ti-mate the TSLS es-ti-ma-tor of the price elas-tic-ity of
  []
 
 
-Underfull \hbox (badness 1242) in paragraph at lines 286--286
+Underfull \hbox (badness 1242) in paragraph at lines 290--290
 \T1/lmr/bx/n/14.4 de-mand for sar-dines us-ing wind_m_s as an in-stru-ment for
  []
 
 [3pdfTeX warning (ext4): destination with the same identifier (name{table.2}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.325 \end{Shaded}
-                  ] [4pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
+l.320 \begin{Shaded}
+                    ] [4pdfTeX warning (ext4): destination with the same identifier (name{table.3}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   \__shipout_drop_firstpage_...
-l.396 \end{verbatim}
-                    ] [5] (./Forsline_assignment4.aux)
+l.390 \end{document}
+                    ] (./Forsline_assignment4.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -472,18 +476,18 @@ Package rerunfilecheck Info: File `Forsline_assignment4.out' has not changed.
 (rerunfilecheck)             Checksum: 27D21AAC0D922BEA7E542601BB3C5F32;7912.
  ) 
 Here is how much of TeX's memory you used:
- 11121 strings out of 480238
- 176130 string characters out of 5894598
- 468630 words of memory out of 5000000
- 28857 multiletter control sequences out of 15000+600000
- 516815 words of font info for 69 fonts, out of 8000000 for 9000
+ 11158 strings out of 480238
+ 176796 string characters out of 5894598
+ 469673 words of memory out of 5000000
+ 28891 multiletter control sequences out of 15000+600000
+ 517120 words of font info for 70 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 60i,10n,63p,1904b,469s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
-Output written on Forsline_assignment4.pdf (5 pages, 212499 bytes).
+ 60i,10n,63p,1904b,350s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}</Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmri10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></Users/miaforsline/Library/TinyTeX/texmf-dist/fonts/type1/public/lm/lmtti10.pfb>
+Output written on Forsline_assignment4.pdf (4 pages, 209641 bytes).
 PDF statistics:
- 168 PDF objects out of 1000 (max. 8388607)
- 136 compressed objects within 2 object streams
- 35 named destinations out of 1000 (max. 500000)
+ 167 PDF objects out of 1000 (max. 8388607)
+ 135 compressed objects within 2 object streams
+ 34 named destinations out of 1000 (max. 500000)
  105 words of extra memory for PDF output out of 10000 (max. 10000000)
 

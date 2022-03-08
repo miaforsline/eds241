@@ -90,10 +90,11 @@ data_log <- data_clean %>%
 mdl <- lm_robust(volume_log ~ price_log, data = data_log)
 price_elasticity <- round(mdl$coefficients[[2]], digits = 3) 
 
-linearHypothesis(mdl, c("price_log=-1"), white.adjust = "hc2")
+hypothesis <- linearHypothesis(mdl, c("price_log=-1"), white.adjust = "hc2")
+hypothesis_p <- hypothesis$`Pr(>Chisq)`[2]
 ```
 
-\noindent The price elasticity of demand, or the slope of the demand curve, for sardines is approximately `r price_elasticity`. 
+\noindent The price elasticity of demand, or the slope of the demand curve, for sardines is approximately `r price_elasticity`. We also reject the null hypothesis that the price elasticity is equal to -1 (p-value 0.05). 
 
 \noindent Table 1 shows the results of a bivariate regression of log-transformed volume sold and log-transformed price per kg of fresh sardines across 56 ports in 4 European contries from 2013 - 2019. 
 
@@ -128,9 +129,7 @@ fs1 <- lm(formula = price_log ~ wind_m_s, data=data_log)
 wind_coef <- round(fs1$coefficients[[2]], digits = 3)
 ```
 
-\noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` Euros. This coefficient has the expected sign because wind makes it more difficult to catch fish. 
-
-Windier = harder to fish = affecting the supply of fish = more expensive fish 
+\noindent The coefficient on wind speed is approximately `r wind_coef`. In other words, on average, when wind speed increases by 1 m/sec, the log price of of sardines per kg increases by `r wind_coef` Euros. This coefficient has the expected sign because wind makes it more difficult to catch fish, decreases the supply of fish, and thus drives up the price of fish sold. 
 
 \noindent Table 2 shows the results of a first-stage regression of wind speed (m/s) and log-transformed price per kg of fresh sardines across 56 ports in 4 European contries from 2013 - 2019. 
 
@@ -172,7 +171,6 @@ f_coef <- round(f$F[2], digits = 2)
 ```{r}
 tsls1 <- ivreg(volume_log ~ price_log | wind_m_s, data = data_log)
 price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
-#summary(tsls1)
 ```
 
 \noindent The estimated price elasticity of demand for sardines is approximately `r price_elasticity2`. 
@@ -201,31 +199,27 @@ stargazer(mdl2, fs1, tsls1,
           header = FALSE, 
           omit = c("Constant"),  
           omit.stat = c("adj.rsq","ser", "f"),
-          #covariate.labels = c("Log(Volume)", "Wind Speed (m/s)", "Log(Price)"),
-          #dep.var.labels = c("Log(Price)", "Log(Volume)"),
-          title = "Title", 
+          covariate.labels = c("Log(Price)", "Wind Speed (m/s)"),
+          dep.var.labels = c("Log(Volume)", "Log(Price)", "Log(Volume)"),
+          title = "Fish price and volume with wind speed instrument", 
           table.placement = "H"
           )
 ```
 
 # (d) Repeat the exercise in (c), but include fixed effects for each year, month, and country. [Hint: you can use the command “as.factor(country) + as.factor(year) +as.factor(month)” to the ivreg function in R]. Report the estimated price elasticity of demand and the F-statistic testing for relevant and non-weak instruments.
 
-left hand side of the bar = second stage (endogenous variable)
-right hand side of the bar = first stage (instrument)
-
 ```{r}
 tsls2 <- ivreg(volume_log ~ price_log + as.factor(country) + as.factor(year) + as.factor(month) | wind_m_s + as.factor(country) + as.factor(year) + as.factor(month), data = data_log)
-
 price_elasticity2 <- round(tsls1$coefficients[[2]], digits = 2)
-
-summary(tsls2)
 ```
+
+The estimated price elasticity of demand is approximately `r price_elasticity2`. 
 
 ```{r}
-fs4 <- lm(formula = price_log ~ wind_m_s + as.factor(country) + as.factor(year) + as.factor(month), data=data_log)
-
-linearHypothesis(fs4, c("wind_m_s=0"), white.adjust = "hc2")
+fs2 <- lm(formula = price_log ~ wind_m_s + as.factor(country) + as.factor(year) + as.factor(month), data=data_log)
+hypothesis2 <- linearHypothesis(fs2, c("wind_m_s=0"), white.adjust = "hc2")
+f2 <- round(hypothesis2$F[2], digits = 2)
 ```
 
-Wind is still a strong instrument even after we account for country, year, and month as fixed effects. 
+The F-statistic for the wind speed instrument is approximately `r f2`, which is still above the threshold of 10. So even when controlling for country, year, and month, wind speed is still a strong and relevant instrument. 
 
