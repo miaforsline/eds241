@@ -1,0 +1,75 @@
+---
+title: "EDS 241 Assignment 5"
+author: "Mia Forsline"
+date: "3/18/2022"
+output: 
+  pdf_document:
+    toc: false
+    number_sections: false
+  html_document:
+    theme: flatly
+    code_folding: show
+    toc: true
+    toc_float: true
+    number_sections: false 
+header-includes:
+  - \setlength{\parindent}{1em}
+  - \usepackage{float}
+---
+# Introduction 
+
+
+# Data description 
+- `rprice` = inflation-adjusted sales price of house
+- `nearinc` = 1 if the house is located near the incinerator, = 0 otherwise
+- `age` = age of the house
+- `land` = square footage of the lot
+- `area` = square footage of the house
+- `rooms` = number of rooms in the house
+- `year` indicator = 1978 or 1981 
+
+# Research question
+What is the impact of the opening of a garbage incinerator on housing values in North Andover, MA ? 
+
+# Set up 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE, 
+                      warning = FALSE)
+
+packages=c("AER", 
+           "car", 
+           "cowplot",
+           "datasets", 
+           "dplyr",
+           "estimatr",
+           "ggplot2",
+           "here",
+           "janitor",
+           "lubridate", 
+           "stargazer", 
+           "stringr",
+           "tibble",
+           "tidyverse",
+           "tidyr", 
+           "tinytex"
+           )
+
+for (i in packages) {
+  if (require(i,character.only=TRUE)==FALSE) {
+    install.packages(i,repos='http://cran.us.r-project.org')
+  }
+  else {
+    require(i,character.only=TRUE)
+  }
+}
+
+options(scipen=999) # not scientific notation
+```
+
+# Read in the data 
+
+```{r}
+
+```
+
