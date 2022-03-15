@@ -99,7 +99,7 @@ inc_coef <- round(mdl$coefficients[[2]], digits = 2) * -1
 
 \noindent The house value "penalty" for houses located near the incinerator is approximately $`r inc_coef`. 
 
-\noindent Table 1 shows that, on average, houses located near an incinerator have inflation-adjusted sales prices that are approximately $`r inc_coef` lower than houses not located near incinerator. 
+\noindent Table 1 shows that, in 1981, on average, houses located near an incinerator had inflation-adjusted sales prices that are approximately $`r inc_coef` lower than houses not located near incinerator. 
 
 ```{r , results = 'asis', echo = FALSE}
 mdl2 <- lm(rprice ~ nearinc, data = data_1981)
@@ -125,14 +125,32 @@ stargazer(mdl2,
 
 # (a) Does this estimated coefficient correspond to the ‘causal’ effect of the incinerator (and the negative amenities that come with it) on housing values? Explain why or why not.
 
-This estimated coefficient does correspond to what we would expect the 'causal' effect of the incinerator to be on housing prices. For example, garbage incinerators emit many pollutants and increase ambient pollution nearby. Thus, according to land market theory, housing values are expected to fall. 
+\noindent This estimated coefficient does correspond to what we would expect the 'causal' effect of the incinerator to be on housing prices. For example, garbage incinerators emit many pollutants and increase ambient pollution nearby. Thus, according to land market theory, housing values are expected to fall. 
 
 # (b) Using the data for 1978, provide some evidence the location choice of the incinerator was not “random”, but rather selected on the basis of house values and characteristics. [Hint: in the 1978 sample, are house values and characteristics balanced by nearinc status?]
 
 ```{r}
+data_1978 <- subset(data_clean, year == 1978)
 
+#Calculate the unadjusted mean difference by hand 
+data_inc <- subset(data_1978, nearinc == 1)
+inc_mean_price <- round(mean(data_inc$rprice), digits = 2)
+
+data_no_inc <- subset(data_1978, nearinc == 0)
+no_inc_mean_price <- round(mean(data_no_inc$rprice), digits = 2)
+
+diff <- no_inc_mean_price - inc_mean_price
+
+#Calculate the unadjusted mean difference using a linear regression 
+
+mdl3 <- lm_robust(age ~ nearinc, data = data)
+age_coef <- round(mdl3$coefficients[[2]], digits = 2)
+#summary(mdl3)
 ```
 
+\noindent In 1978, on average, houses located near the incinerator cost approximately \$`r inc_mean_price` while houses not located near the incinerator cost approximately \$`r no_inc_mean_price`. This difference of approximately $`r diff` demonstrates that the location choice of the incinerator was unlikely to be random.
+
+\noindent Furthermore, on average, houses located near the incinerator are approximately `r age_coef` years older than houses located far from the incinerator (p-value < 0.05). This also illustrates how the incinerator was likely not placed randomly. 
 
 # (c) Based on the observed differences in (b), explain why the estimate in (a) is likely to be biased downward (i.e., overstate the negative effect of the incinerator on housing values).
 
