@@ -145,47 +145,24 @@ diff <- no_inc_mean_price - inc_mean_price
 #Calculate the unadjusted mean difference using a linear regression 
 
 mdl3 <- lm_robust(age ~ nearinc, data = data)
-age_coef <- round(mdl3$coefficients[[2]], digits = 2)
+age_coef <- round(mdl3$coefficients[[2]], digits = 2) 
 
 mdl4 <- lm_robust(rooms ~ nearinc, data = data)
-rooms_coef <- round(mdl4$coefficients[[2]], digits = 2)
+rooms_coef <- round(mdl4$coefficients[[2]], digits = 2) * -1
 
 mdl5 <- lm_robust(area ~ nearinc, data = data)
-area_coef <- round(mdl5$coefficients[[2]], digits = 2)
-#summary(mdl5)
+area_coef <- round(mdl5$coefficients[[2]], digits = 2) * -1
 ```
 
 \noindent In 1978, on average, houses located near the incinerator cost approximately \$`r inc_mean_price` while houses not located near the incinerator cost approximately \$`r no_inc_mean_price`. This difference of approximately $`r diff` demonstrates that the location choice of the incinerator was unlikely to be random.
 
-\noindent Furthermore, on average, houses located near the incinerator are approximately `r age_coef` years older, have `r rooms_coef` fewer rooms, and have `r area_coef` less square footage than houses located far from the incinerator (p-value < 0.05). This also illustrates how the incinerator was likely not placed randomly. 
+\noindent Furthermore, on average, houses located near the incinerator are approximately `r age_coef` years older, have approximately `r rooms_coef` fewer rooms, and have approximately `r area_coef` less square footage than houses located far from the incinerator (p-value < 0.05). This also illustrates how the incinerator was likely not placed randomly. 
 
 # (c) Based on the observed differences in (b), explain why the estimate in (a) is likely to be biased downward (i.e., overstate the negative effect of the incinerator on housing values).
 
 \noindent Since houses located near the incinerator are more likely to be older, have fewer rooms, and have less square footage, they are already more likely to have lower housing prices than houses located far from the incinerator regardless of the incinerator's presence. In other words, the groups being compared (houses near the incincerator vs houses far from the incinerator) are not well balanced and thus are likely to overestimate the negative effect of the incinerator on housing values. 
 
 # (d) Use a difference-in-differences (DD) estimator to estimate the causal effect of the incinerator on housing values without controlling for house and lot characteristics. Interpret the magnitude and sign of the estimated DD coefficient. 
-
-```{r}
-# # DD REGRESSION, Y = Wind+Solar installed capacity (MW), using lm package
-# DD_cap1 <- lm(formula = rprice ~ nearinc, data = data_clean)
-# se_DD_cap1 <- starprep(DD_cap1, stat = c("std.error"), se_type = "HC2", alpha = 0.05) 
-# #30 years = 30 time dummies
-# #48 states = 48 state dummies
-# 
-# DD_cap2 <- lm(formula = rprice ~ nearinc, data = data_clean)
-# se_DD_cap2 <- starprep(DD_cap2, 
-#                        stat = c("std.error"), 
-#                        se_type = "CR2", 
-#                        clusters=RPS$state_name, 
-#                        alpha = 0.05) 
-# 
-# se_models <- list(se_DD_cap1[[1]], se_DD_cap2[[1]])
-# stargazer(DD_cap1, DD_cap2, se = se_models, keep=c("rps_D"), type="text")
-# 
-# #RPS will increase energy capacity by 546 megawatts 
-# #but the SE doubles when we realize that observations are not independent 
-```
-
 
 ```{r}
 # DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
@@ -195,37 +172,68 @@ DD_gen1 <- plm(rprice ~ nearinc,
                effect = "twoways", 
                data = data_clean)
 
+near_inc_coef <- round(DD_gen1$coefficients[[1]], digits = 2) * -1
+
 # Calculate standard errors (note slightly different procedure with plm package)
 se_DD_gen1 <- coeftest(DD_gen1, vcov = vcovHC(DD_gen1, type = "HC2"))[, "Std. Error"]
+```
 
+\noindent Table 2 shows…
+
+```{r , results = 'asis', echo = FALSE}
 # Reformat standard errors for stargazer()
 se_DD_gen1 <- list(se_DD_gen1)
 
 # Output results with stargazer
-stargazer(DD_gen1, keep=c("nearinc"), se = se_DD_gen1, type="text")
+#stargazer(DD_gen1, keep=c("nearinc"), se = se_DD_gen1, type="text")
+
+stargazer(DD_gen1,  
+          keep = c("nearinc"), 
+          se = se_DD_gen1, 
+          type = "latex", 
+          ci = TRUE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("Incinerator Presence"),
+          dep.var.labels = c("Housing Price"),
+          title = "Title", 
+          table.placement = "H"
+          )
 ```
 
+Without controlling for housing or lot characteristics, the estimated DD coefficient of `nearinc` tells us that, on average, houses located near an incinerator are $`r near_inc_coef` cheaper than houses located far from an incinerator. 
 
 # (e) Report the 95% confidence interval for the estimate of the causal effect on the incinerator in (d).
+
+```{r}
+#use the plm::tidy() function to summarize information about the components of a plm model
+conf <- tidy(DD_gen1, conf.int = TRUE, conf.level = 0.95)
+conf_low <- conf$conf.low
+conf_high <- conf$conf.high
+```
+
+The lower bound of the confidence interval is `r conf_low`, and the upper bound of the confidence interval is `r conf_high`. 
 
 # (f) How does your answer in (d) changes when you control for house and lot characteristics? Test the hypothesis that the coefficients on the house and lot characteristics are all jointly equal to 0.
 
 ```{r}
-# DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
-DD_gen2 <- plm(rprice ~ nearinc + age + rooms + area + land, 
-               index = c("year"), 
-               model = "within", 
-               effect = "twoways", 
-               data = data_clean)
-
-# Calculate standard errors (note slightly different procedure with plm package)
-se_DD_gen2 <- coeftest(DD_gen2, vcov = vcovHC(DD_gen2, type = "HC2"))[, "Std. Error"]
-
-# Reformat standard errors for stargazer()
-se_DD_gen2 <- list(se_DD_gen2)
-
-# Output results with stargazer
-stargazer(DD_gen2, keep=c("nearinc"), se = se_DD_gen2, type="text")
+# # DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
+# DD_gen2 <- plm(rprice ~ nearinc + age + rooms + area + land, 
+#                index = c("year"), 
+#                model = "within", 
+#                effect = "twoways", 
+#                data = data_clean)
+# 
+# # Calculate standard errors (note slightly different procedure with plm package)
+# se_DD_gen2 <- coeftest(DD_gen2, vcov = vcovHC(DD_gen2, type = "HC2"))[, "Std. Error"]
+# 
+# # Reformat standard errors for stargazer()
+# se_DD_gen2 <- list(se_DD_gen2)
+# 
+# # Output results with stargazer
+# stargazer(DD_gen2, keep=c("nearinc"), se = se_DD_gen2, type="text")
 ```
 
 
