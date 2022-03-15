@@ -145,14 +145,22 @@ diff <- no_inc_mean_price - inc_mean_price
 
 mdl3 <- lm_robust(age ~ nearinc, data = data)
 age_coef <- round(mdl3$coefficients[[2]], digits = 2)
-#summary(mdl3)
+
+mdl4 <- lm_robust(rooms ~ nearinc, data = data)
+rooms_coef <- round(mdl4$coefficients[[2]], digits = 2)
+
+mdl5 <- lm_robust(area ~ nearinc, data = data)
+area_coef <- round(mdl5$coefficients[[2]], digits = 2)
+#summary(mdl5)
 ```
 
 \noindent In 1978, on average, houses located near the incinerator cost approximately \$`r inc_mean_price` while houses not located near the incinerator cost approximately \$`r no_inc_mean_price`. This difference of approximately $`r diff` demonstrates that the location choice of the incinerator was unlikely to be random.
 
-\noindent Furthermore, on average, houses located near the incinerator are approximately `r age_coef` years older than houses located far from the incinerator (p-value < 0.05). This also illustrates how the incinerator was likely not placed randomly. 
+\noindent Furthermore, on average, houses located near the incinerator are approximately `r age_coef` years older, have `r rooms_coef` fewer rooms, and have `r area_coef` less square footage than houses located far from the incinerator (p-value < 0.05). This also illustrates how the incinerator was likely not placed randomly. 
 
 # (c) Based on the observed differences in (b), explain why the estimate in (a) is likely to be biased downward (i.e., overstate the negative effect of the incinerator on housing values).
+
+\noindent Since houses located near the incinerator are more likely to be older, have fewer rooms, and have less square footage, they are already more likely to have lower housing prices than houses located far from the incinerator regardless of the incinerator's presence. In other words, the groups being compared (houses near the incincerator vs houses far from the incinerator) are not well balanced and thus are likely to overestimate the negative effect of the incinerator on housing values. 
 
 # (d) Use a difference-in-differences (DD) estimator to estimate the causal effect of the incinerator on housing values without controlling for house and lot characteristics. Interpret the magnitude and sign of the estimated DD coefficient. 
 
