@@ -51,6 +51,7 @@ packages=c("AER",
            "here",
            "janitor",
            "lubridate", 
+           "plm", 
            "stargazer", 
            "stringr",
            "tibble",
@@ -164,9 +165,69 @@ area_coef <- round(mdl5$coefficients[[2]], digits = 2)
 
 # (d) Use a difference-in-differences (DD) estimator to estimate the causal effect of the incinerator on housing values without controlling for house and lot characteristics. Interpret the magnitude and sign of the estimated DD coefficient. 
 
+```{r}
+# # DD REGRESSION, Y = Wind+Solar installed capacity (MW), using lm package
+# DD_cap1 <- lm(formula = rprice ~ nearinc, data = data_clean)
+# se_DD_cap1 <- starprep(DD_cap1, stat = c("std.error"), se_type = "HC2", alpha = 0.05) 
+# #30 years = 30 time dummies
+# #48 states = 48 state dummies
+# 
+# DD_cap2 <- lm(formula = rprice ~ nearinc, data = data_clean)
+# se_DD_cap2 <- starprep(DD_cap2, 
+#                        stat = c("std.error"), 
+#                        se_type = "CR2", 
+#                        clusters=RPS$state_name, 
+#                        alpha = 0.05) 
+# 
+# se_models <- list(se_DD_cap1[[1]], se_DD_cap2[[1]])
+# stargazer(DD_cap1, DD_cap2, se = se_models, keep=c("rps_D"), type="text")
+# 
+# #RPS will increase energy capacity by 546 megawatts 
+# #but the SE doubles when we realize that observations are not independent 
+```
+
+
+```{r}
+# DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
+DD_gen1 <- plm(rprice ~ nearinc, 
+               index = c("year"), 
+               model = "within", 
+               effect = "twoways", 
+               data = data_clean)
+
+# Calculate standard errors (note slightly different procedure with plm package)
+se_DD_gen1 <- coeftest(DD_gen1, vcov = vcovHC(DD_gen1, type = "HC2"))[, "Std. Error"]
+
+# Reformat standard errors for stargazer()
+se_DD_gen1 <- list(se_DD_gen1)
+
+# Output results with stargazer
+stargazer(DD_gen1, keep=c("nearinc"), se = se_DD_gen1, type="text")
+```
+
+
 # (e) Report the 95% confidence interval for the estimate of the causal effect on the incinerator in (d).
 
 # (f) How does your answer in (d) changes when you control for house and lot characteristics? Test the hypothesis that the coefficients on the house and lot characteristics are all jointly equal to 0.
+
+```{r}
+# DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
+DD_gen2 <- plm(rprice ~ nearinc + age + rooms + area + land, 
+               index = c("year"), 
+               model = "within", 
+               effect = "twoways", 
+               data = data_clean)
+
+# Calculate standard errors (note slightly different procedure with plm package)
+se_DD_gen2 <- coeftest(DD_gen2, vcov = vcovHC(DD_gen2, type = "HC2"))[, "Std. Error"]
+
+# Reformat standard errors for stargazer()
+se_DD_gen2 <- list(se_DD_gen2)
+
+# Output results with stargazer
+stargazer(DD_gen2, keep=c("nearinc"), se = se_DD_gen2, type="text")
+```
+
 
 # (g) Using the results from the DD regression in (f), calculate by how much did real housing values change on average between 1978 and 1981.
 
