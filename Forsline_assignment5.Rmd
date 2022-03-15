@@ -17,9 +17,12 @@ header-includes:
   - \usepackage{float}
 ---
 # Introduction 
-
+We plan to examine the effect of opening a garbage incinerator on housing values in North Andover, Massachusetts during the early 1980s. Construction began in 1981, and the incinerator was operational by 1985. We hypothesize that the placement of an incinerator will decrease the price of houses nearby the incinerator. 
 
 # Data description 
+The data used are from the paper: K.A. Kiel and K.T. McClain (1995): “House Prices During Siting Decision Stages: The Case of an Incinerator from Rumor Through Operation,” *Journal of Environmental Economics and Management* 28, 241-255.
+
+Data variables: 
 - `rprice` = inflation-adjusted sales price of house
 - `nearinc` = 1 if the house is located near the incinerator, = 0 otherwise
 - `age` = age of the house
