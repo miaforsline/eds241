@@ -1,5 +1,5 @@
 ---
-title: "EDS 241 Assignment 5"
+title: "EDS 241 Take Home Final"
 author: "Mia Forsline"
 date: "3/18/2022"
 output: 
@@ -20,10 +20,11 @@ header-includes:
 We plan to examine the effect of opening a garbage incinerator on housing values in North Andover, Massachusetts during the early 1980s. Construction began in 1981, and the incinerator was operational by 1985. We hypothesize that the placement of an incinerator will decrease the price of houses nearby the incinerator. 
 
 # Data description 
-The data used are from the paper: K.A. Kiel and K.T. McClain (1995): “House Prices During Siting Decision Stages: The Case of an Incinerator from Rumor Through Operation,” *Journal of Environmental Economics and Management* 28, 241-255.
+We will use housing price data of houses sold in 1978 (before people knew about the incinerator's construction) and in 1981 (after construction had started). The data used are from the paper: K.A. Kiel and K.T. McClain (1995): “House Prices During Siting Decision Stages: The Case of an Incinerator from Rumor Through Operation,” *Journal of Environmental Economics and Management* 28, 241-255. 
 
-Data variables: 
-- `rprice` = inflation-adjusted sales price of house
+\noindent Data variables: 
+
+- `rprice` = inflation-adjusted sales price of the house
 - `nearinc` = 1 if the house is located near the incinerator, = 0 otherwise
 - `age` = age of the house
 - `land` = square footage of the lot
@@ -70,15 +71,68 @@ for (i in packages) {
 options(scipen=999) # not scientific notation
 ```
 
-# Read in the data 
+## Read in the data 
 
 ```{r}
 data <- read_csv(here("data", "KM_EDS241.csv"))
+
+data_clean <- data %>% 
+  clean_names() %>% 
+  mutate(year = as.factor(year),
+         age = as.numeric(age), 
+         rooms = as.numeric(rooms), 
+         area = as.numeric(area), 
+         land = as.numeric(land), 
+         nearinc = as.factor(nearinc), 
+         rprice = as.numeric(rprice)
+  )
 ```
 
-# (a) Using the data for 1981, estimate a simple OLS regression of real house values on the indicator for being located near the incinerator in 1981. What is the house value “penalty” for houses located near the incinerator? Does this estimated coefficient correspond to the ‘causal’ effect of the incinerator (and the negative amenities that come with it) on housing values? Explain why or why not.
+# (a) Using the data for 1981, estimate a simple OLS regression of real house values on the indicator for being located near the incinerator in 1981. What is the house value “penalty” for houses located near the incinerator? 
+
+```{r}
+data_1981 <- subset(data_clean, year == 1981)
+
+mdl <- lm_robust(rprice ~ nearinc, data = data_1981)
+inc_coef <- round(mdl$coefficients[[2]], digits = 2) * -1 
+```
+
+\noindent The house value "penalty" for houses located near the incinerator is approximately $`r inc_coef`. 
+
+\noindent Table 1 shows that, on average, houses located near an incinerator have inflation-adjusted sales prices that are approximately $`r inc_coef` lower than houses not located near incinerator. 
+
+```{r , results = 'asis', echo = FALSE}
+mdl2 <- lm(rprice ~ nearinc, data = data_1981)
+mdl_se <- starprep(mdl2, 
+                   stat = c("std.error"), 
+                   se_type = "HC2", 
+                   alpha = 0.05)
+
+stargazer(mdl2,  
+          se = mdl_se, 
+          type = "latex", 
+          ci = FALSE, 
+          no.space = TRUE, 
+          header = FALSE, 
+          omit = c("Constant"),  
+          omit.stat = c("adj.rsq","ser", "f"),
+          covariate.labels = c("Incinerator Presence"),
+          dep.var.labels = c("Housing Price"),
+          title = "Being near an incinerator lowers housing price", 
+          table.placement = "H"
+          )
+```
+
+# (a) Does this estimated coefficient correspond to the ‘causal’ effect of the incinerator (and the negative amenities that come with it) on housing values? Explain why or why not.
+
+This estimated coefficient does correspond to what we would expect the 'causal' effect of the incinerator to be on housing prices. For example, garbage incinerators emit many pollutants and increase ambient pollution nearby. Thus, according to land market theory, housing values are expected to fall. 
 
 # (b) Using the data for 1978, provide some evidence the location choice of the incinerator was not “random”, but rather selected on the basis of house values and characteristics. [Hint: in the 1978 sample, are house values and characteristics balanced by nearinc status?]
+
+```{r}
+
+```
+
 
 # (c) Based on the observed differences in (b), explain why the estimate in (a) is likely to be biased downward (i.e., overstate the negative effect of the incinerator on housing values).
 
