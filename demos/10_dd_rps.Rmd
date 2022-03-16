@@ -71,7 +71,10 @@ stargazer(DD_cap1, DD_cap2, se = se_models, keep=c("rps_D"), type="text")
 ```{r}
 # DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
 DD_gen1 <- plm(gen_WS_gwh ~ rps_D, 
-               index = c("state_name", "year"), model = "within", effect = "twoways", data = RPS)
+               index = c("state_name", "year"), 
+               model = "within", 
+               effect = "twoways", 
+               data = RPS)
 
 # Calculate standard errors (note slightly different procedure with plm package)
 se_DD_gen1 <- coeftest(DD_gen1, vcov = vcovHC(DD_gen1, type = "HC2"))[, "Std. Error"]
@@ -79,6 +82,10 @@ se_DD_gen1 <- coeftest(DD_gen1, vcov = vcovHC(DD_gen1, type = "HC2"))[, "Std. Er
 se_DD_gen1 <- list(se_DD_gen1)
 # Output results with stargazer
 stargazer(DD_gen1, keep=c("rps_D"), se = se_DD_gen1, type="text")
+
+
+
+
 #cluster robust 
 #no significance 
 #RPS increases wind+solar generation by 2.4GWh but it is not statistically significant 

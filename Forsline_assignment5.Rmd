@@ -126,7 +126,7 @@ stargazer(mdl2,
 
 # (a) Does this estimated coefficient correspond to the ‘causal’ effect of the incinerator (and the negative amenities that come with it) on housing values? Explain why or why not.
 
-\noindent This estimated coefficient does correspond to what we would expect the 'causal' effect of the incinerator to be on housing prices. For example, garbage incinerators emit many pollutants and increase ambient pollution nearby. Thus, according to land market theory, housing values are expected to fall. 
+\noindent This estimated coefficient most likely corresponds to what we would expect the 'causal' effect of the incinerator to be on housing prices. For example, garbage incinerators emit many pollutants and increase ambient pollution nearby. Thus, according to land market theory, housing values are expected to fall. However, due to possible omitted variables bias, it may be difficult to definitively use the estimated coefficient to determine a causal effect of the incinerator on housing prices. 
 
 # (b) Using the data for 1978, provide some evidence the location choice of the incinerator was not “random”, but rather selected on the basis of house values and characteristics. [Hint: in the 1978 sample, are house values and characteristics balanced by nearinc status?]
 
@@ -165,6 +165,30 @@ area_coef <- round(mdl5$coefficients[[2]], digits = 2) * -1
 # (d) Use a difference-in-differences (DD) estimator to estimate the causal effect of the incinerator on housing values without controlling for house and lot characteristics. Interpret the magnitude and sign of the estimated DD coefficient. 
 
 ```{r}
+# DD REGRESSION, Y = Wind+Solar installed capacity (MW), using lm package
+DD_cap1 <- lm(formula = rprice ~ nearinc, data=data_clean)
+se_DD_cap1 <- starprep(DD_cap1, 
+                       stat = c("std.error"), 
+                       se_type = "HC2", alpha = 0.05) 
+#30 years = 30 time dummies
+#48 states = 48 state dummies
+
+DD_cap2 <- lm(formula = rprice ~ nearinc, data=data_clean)
+se_DD_cap2 <- starprep(DD_cap2, 
+                       stat = c("std.error"), 
+                       se_type = "CR2", 
+                       clusters=data_clean$year, 
+                       alpha = 0.05) 
+
+se_models <- list(se_DD_cap1[[1]], se_DD_cap2[[1]])
+stargazer(DD_cap1, DD_cap2, 
+          se = se_models, 
+          keep = c("nearinc"), 
+          type="text")
+```
+
+
+```{r}
 # DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
 DD_gen1 <- plm(rprice ~ nearinc, 
                index = c("year"), 
@@ -201,7 +225,7 @@ stargazer(DD_gen1,
           )
 ```
 
-Without controlling for housing or lot characteristics, the estimated DD coefficient of `nearinc` tells us that, on average, houses located near an incinerator are $`r near_inc_coef` cheaper than houses located far from an incinerator. 
+\noindent Without controlling for housing or lot characteristics, the estimated DD coefficient of `nearinc` tells us that, on average, houses located near an incinerator are $`r near_inc_coef` cheaper than houses located far from an incinerator. 
 
 # (e) Report the 95% confidence interval for the estimate of the causal effect on the incinerator in (d).
 
@@ -214,9 +238,9 @@ conf_high <- round(conf$conf.high, digits = 2)
 confint(DD_gen1)
 ```
 
-The lower bound of the confidence interval is `r conf_low`, and the upper bound of the confidence interval is `r conf_high`. 
+\noindent The lower bound of the confidence interval is `r conf_low`, and the upper bound of the confidence interval is `r conf_high`. 
 
-# (f) How does your answer in (d) changes when you control for house and lot characteristics? Test the hypothesis that the coefficients on the house and lot characteristics are all jointly equal to 0.
+# (f) How does your answer in (d) changes when you control for house and lot characteristics? 
 
 ```{r}
 # DD REGRESSION, Y = Wind+Solar generation (GWh), using plm package
@@ -240,7 +264,7 @@ se_DD_gen2 <- list(se_DD_gen2)
 
 # Output results with stargazer()
 stargazer(DD_gen2,  
-          keep = c("nearinc"), 
+          keep = c("nearinc", "age", "rooms", "area", "land"), 
           se = se_DD_gen2, 
           type = "latex", 
           ci = FALSE,
@@ -255,6 +279,17 @@ stargazer(DD_gen2,
           )
 ```
 
+# (f) Test the hypothesis that the coefficients on the house and lot characteristics are all jointly equal to 0.
+
+```{r}
+hyp <- linearHypothesis(DD_gen2, c("age=0", "rooms=0", "area=0", "land=0"), white.adjust = "hc2")
+p <- hyp$`Pr(>Chisq)`[[2]]
+```
+
+`r p`
+
 # (g) Using the results from the DD regression in (f), calculate by how much did real housing values change on average between 1978 and 1981.
+
+
 
 # (h) Explain (in words) what is the key assumption underlying the causal interpretation of the DD estimator in the context of the incinerator construction in North Andover.
