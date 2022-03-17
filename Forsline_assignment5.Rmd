@@ -252,7 +252,7 @@ se_DD_cap4 <- starprep(DD_cap4,
                        alpha = 0.05) 
 
 near_inc_coef2 <- round(DD_cap3$coefficients[[2]], digits = 2) * -1
-year_coef <- round(DD_cap3$coefficients[[3]], digits = 2) * -1
+year_coef <- round(DD_cap3$coefficients[[3]], digits = 2) 
 ```
 
 \noindent Table 3 shows…
@@ -277,7 +277,7 @@ stargazer(DD_cap3, DD_cap4,
           )
 ```
 
-When we control for housing and lot characteristics, the `nearinc` coefficient `r near_inc_ceof2` and `year` coefficient `r year_coef` decrease and are no longer statistically significant. Thus, the incinerator indicator no longer demonstrates a causal effect on housing prices. 
+When we control for housing and lot characteristics, the `nearinc` coefficient `r near_inc_coef2` and `year` coefficient `r year_coef` decrease and are no longer statistically significant. Thus, the incinerator indicator no longer demonstrates a causal effect on housing prices. 
 
 # (f) Test the hypothesis that the coefficients on the house and lot characteristics are all jointly equal to 0.
 
@@ -287,13 +287,16 @@ hyp <- linearHypothesis(DD_cap3, c("age=0", "rooms=0", "area=0", "land=0"), whit
 p <- hyp$`Pr(>Chisq)`[[2]]
 ```
 
-\noindent The p-value `r p` < 0, so we can reject the null hypothesis and conclude that the house and lot characteristics are all jointly equal to zero. 
+\noindent The p-value `r p` < 0.05, so we can reject the null hypothesis and conclude that the house and lot characteristics are all jointly equal to zero. 
 
 # (g) Using the results from the DD regression in (f), calculate by how much did real housing values change on average between 1978 and 1981.
 
 ```{r}
-
+DD_cap3 <- lm_robust(formula = rprice ~ nearinc + year + age + rooms + area + land, data=data_clean)
 ```
 
+Holding all else constant, from 1978 to 1981, housing values increased by `r year_coef`. 
 
 # (h) Explain (in words) what is the key assumption underlying the causal interpretation of the DD estimator in the context of the incinerator construction in North Andover.
+
+The key assumption is the parallel trends assumption, which says the treatment group D (houses near the incinerator) and the control group (houses not near the incinerator) would have the same trends in their outcomes (change housing prices at the same rate over time) regardless of the treatment (the placement of the incinerator). In other words, the control group provides a valid counterfactual for the temporal evolution of the mean outcomes in the treatment group in the absence of a change in treatment. 
